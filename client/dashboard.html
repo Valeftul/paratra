@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>СкладПро — Управление запасами</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:        #0f1117;
+    --surface:   #181c27;
+    --surface2:  #1f2538;
+    --border:    #2a3050;
+    --accent:    #f0a500;
+    --accent2:   #e05c2a;
+    --green:     #2ed573;
+    --red:       #ff4757;
+    --blue:      #3d8bff;
+    --text:      #e8ecf4;
+    --muted:     #6b7599;
+    --font-head: 'Bebas Neue', sans-serif;
+    --font-body: 'Golos Text', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-title {
+    font-family: var(--font-head);
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .logo-sub {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  .nav { padding: 16px 12px; flex: 1; }
+  .nav-section { margin-bottom: 24px; }
+  .nav-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    padding: 0 12px 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--muted);
+    font-weight: 500;
+    transition: all 0.18s;
+    position: relative;
+    text-decoration: none;
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active {
+    background: rgba(240,165,0,0.12);
+    color: var(--accent);
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 20%; bottom: 20%;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 0 3px 3px 0;
+  }
+  .nav-icon { font-size: 18px; width: 22px; text-align: center; flex-shrink: 0; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  .sidebar-user {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .avatar {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; color: var(--bg);
+    flex-shrink: 0;
+  }
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-weight: 600; font-size: 13px; truncate: ellipsis; }
+  .user-role { font-size: 11px; color: var(--muted); }
+  .logout-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); font-size: 16px; padding: 4px;
+    transition: color 0.2s;
+  }
+  .logout-btn:hover { color: var(--red); }
+
+  /* ─── MAIN ─── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    gap: 16px;
+  }
+  .page-title {
+    font-family: var(--font-head);
+    font-size: 28px;
+    letter-spacing: 1.5px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+  .search-wrap {
+    position: relative;
+  }
+  .search-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 8px 12px 8px 36px;
+    width: 220px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-icon {
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .btn-primary:hover { background: #ffb929; transform: translateY(-1px); }
+
+  /* ─── CONTENT ─── */
+  .content { padding: 28px 32px; flex: 1; overflow-y: auto; }
+
+  /* DATE STRIP */
+  .date-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .date-text { font-size: 13px; color: var(--muted); }
+  .date-text span { color: var(--text); font-weight: 500; }
+
+  /* STAT CARDS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: transform 0.2s, border-color 0.2s;
+    animation: fadeUp 0.5s ease both;
+  }
+  .stat-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 0 0 12px 12px;
+  }
+  .stat-card.yellow::after { background: var(--accent); }
+  .stat-card.green::after  { background: var(--green); }
+  .stat-card.red::after    { background: var(--red); }
+  .stat-card.blue::after   { background: var(--blue); }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .stat-value {
+    font-family: var(--font-head);
+    font-size: 40px;
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-card.yellow .stat-value { color: var(--accent); }
+  .stat-card.green  .stat-value { color: var(--green); }
+  .stat-card.red    .stat-value { color: var(--red); }
+  .stat-card.blue   .stat-value { color: var(--blue); }
+
+  .stat-meta {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .stat-meta .up   { color: var(--green); }
+  .stat-meta .down { color: var(--red); }
+
+  .stat-icon {
+    position: absolute;
+    right: 16px; top: 16px;
+    font-size: 28px;
+    opacity: 0.12;
+  }
+
+  /* TWO COLUMN */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  /* PANEL */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-title {
+    font-family: var(--font-head);
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+  .panel-link {
+    font-size: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .panel-link:hover { text-decoration: underline; }
+
+  /* TRANSACTIONS TABLE */
+  .tx-table { width: 100%; border-collapse: collapse; }
+  .tx-table th {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-align: left;
+    padding: 10px 20px;
+    background: var(--surface2);
+  }
+  .tx-table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .tx-table tr:last-child td { border-bottom: none; }
+  .tx-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .tx-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .tx-type.income  { background: rgba(46,213,115,0.12); color: var(--green); }
+  .tx-type.outcome { background: rgba(61,139,255,0.12); color: var(--blue); }
+  .tx-type.writeoff{ background: rgba(255,71,87,0.12);  color: var(--red); }
+
+  .tx-product { font-weight: 500; }
+  .tx-sku { font-size: 11px; color: var(--muted); }
+  .tx-amount { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tx-by { font-size: 12px; color: var(--muted); }
+
+  /* LOW STOCK LIST */
+  .low-stock-list { padding: 8px 0; }
+  .low-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .low-item:last-child { border-bottom: none; }
+  .low-item:hover { background: var(--surface2); }
+
+  .low-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,71,87,0.12);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .low-name { font-weight: 500; font-size: 13px; }
+  .low-sku  { font-size: 11px; color: var(--muted); }
+  .low-qty  { margin-left: auto; text-align: right; }
+  .low-qty-val { font-weight: 700; color: var(--red); font-size: 15px; font-variant-numeric: tabular-nums; }
+  .low-qty-min { font-size: 11px; color: var(--muted); }
+
+  /* CHART AREA */
+  .chart-section { margin-bottom: 24px; }
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .chart-title {
+    font-family: var(--font-head);
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+  }
+  .legend-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+
+  /* SVG bar chart */
+  .bar-chart { overflow: visible; }
+  .bar-group:hover .bar-rect { filter: brightness(1.3); }
+  .bar-label { font-family: var(--font-body); font-size: 11px; fill: var(--muted); }
+  .bar-val   { font-family: var(--font-body); font-size: 10px; fill: var(--text); font-weight: 600; }
+
+  /* CATEGORY PILLS */
+  .categories-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px 20px;
+  }
+  .cat-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .cat-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .cat-count {
+    background: var(--border);
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.10s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.20s; }
+  .two-col .panel:first-child { animation-delay: 0.25s; }
+  .two-col .panel:last-child  { animation-delay: 0.30s; }
+  .chart-wrap { animation-delay: 0.35s; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 1200px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content { padding: 16px; }
+    .topbar  { padding: 14px 16px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-title">СКЛАД ПРО</div>
+    <div class="logo-sub">Управление запасами</div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-section">
+      <div class="nav-label">Основное</div>
+      <a class="nav-item active" onclick="setActive(this)">
+        <span class="nav-icon">⊞</span> Дашборд
+      </a>
+      <a class="nav-item" href="/products">
+  <span class="nav-icon">📦</span> Товары
+</a>
+ <a class="nav-item" href="/transactions">
+  <span class="nav-icon">↕️</span> Операции
+<span class="nav-badge">3</span>
+</a>
+      </a>
+      <a class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon">⚠️</span> Низкий остаток
+        <span class="nav-badge">5</span>
+      </a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Справочники</div>
+      <a class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon">🏷️</span> Категории
+      </a>
+       <a class="nav-item" href="/suppliers"><span class="nav-icon">🚚</span> Поставщики</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Отчёты</div>
+      <a class="nav-item" href="/analytics"><span class="nav-icon">📊</span> Аналитика</a>
+      <a class="nav-item" href="/contracts"><span class="nav-icon">📄</span> Договоры</a>
+      <a class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon">📋</span> Экспорт
+      </a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Система</div>
+      <a class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon">👤</span> Пользователи
+      </a>
+      <a class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon">⚙️</span> Настройки
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-user">
+    <div class="avatar">АИ</div>
+    <div class="user-info">
+      <div class="user-name">Алексей И.</div>
+      <div class="user-role">Администратор</div>
+    </div>
+    <button class="logout-btn" title="Выйти">⏏</button>
+  </div>
+</aside>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="page-title">ДАШБОРД</div>
+    <div class="topbar-right">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" placeholder="Поиск товара..." id="searchInput" />
+      </div>
+      <button class="btn btn-primary" onclick="showModal()">
+        + Новая операция
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- DATE -->
+    <div class="date-strip">
+      <div class="date-text">
+        Сегодня: <span id="todayDate"></span>
+      </div>
+      <div class="date-text">Последнее обновление: <span>только что</span></div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
+      <div class="stat-card yellow">
+        <span class="stat-icon">📦</span>
+        <div class="stat-label">Товаров в системе</div>
+        <div class="stat-value" id="cnt-products">148</div>
+        <div class="stat-meta">
+          <span class="up">▲ 12</span>&nbsp;за последние 30 дней
+        </div>
+      </div>
+      <div class="stat-card green">
+        <span class="stat-icon">💰</span>
+        <div class="stat-label">Стоимость склада</div>
+        <div class="stat-value" id="cnt-value">2.4М</div>
+        <div class="stat-meta">
+          <span class="up">▲ 8.3%</span>&nbsp;к прошлому месяцу
+        </div>
+      </div>
+      <div class="stat-card red">
+        <span class="stat-icon">⚠️</span>
+        <div class="stat-label">Низкий остаток</div>
+        <div class="stat-value" id="cnt-low">5</div>
+        <div class="stat-meta">
+          <span class="down">▼ нужно пополнить</span>
+        </div>
+      </div>
+      <div class="stat-card blue">
+        <span class="stat-icon">🔄</span>
+        <div class="stat-label">Операций сегодня</div>
+        <div class="stat-value" id="cnt-ops">23</div>
+        <div class="stat-meta">
+          <span class="up">▲ 5</span>&nbsp;к вчерашнему
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="chart-section">
+      <div class="chart-wrap">
+        <div class="chart-header">
+          <div class="chart-title">ДВИЖЕНИЕ ТОВАРОВ — ИЮНЬ 2025</div>
+          <div class="chart-legend">
+            <span><span class="legend-dot" style="background:var(--green)"></span>Приход</span>
+            <span><span class="legend-dot" style="background:var(--blue)"></span>Расход</span>
+            <span><span class="legend-dot" style="background:var(--red)"></span>Списание</span>
+          </div>
+        </div>
+        <svg class="bar-chart" width="100%" height="180" viewBox="0 0 900 180" preserveAspectRatio="none" id="chartSvg"></svg>
+      </div>
+    </div>
+
+    <!-- TWO COLUMN -->
+    <div class="two-col">
+
+      <!-- TRANSACTIONS -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">ПОСЛЕДНИЕ ОПЕРАЦИИ</div>
+          <a class="panel-link">Все операции →</a>
+        </div>
+        <table class="tx-table">
+          <thead>
+            <tr>
+              <th>Тип</th>
+              <th>Товар</th>
+              <th>Кол-во</th>
+              <th>Сумма</th>
+              <th>Кто</th>
+              <th>Время</th>
+            </tr>
+          </thead>
+          <tbody id="txBody"></tbody>
+        </table>
+      </div>
+
+      <!-- LOW STOCK -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">НИЗКИЙ ОСТАТОК</div>
+          <a class="panel-link">Заказать →</a>
+        </div>
+        <div class="low-stock-list" id="lowList"></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">КАТЕГОРИИ ТОВАРОВ</div>
+      </div>
+      <div class="categories-row" id="catRow"></div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- ═══ MODAL ═══ -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;align-items:center;justify-content:center;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;width:420px;max-width:95vw;animation:fadeUp 0.3s ease;">
+    <div style="font-family:var(--font-head);font-size:24px;letter-spacing:1px;margin-bottom:24px;">НОВАЯ ОПЕРАЦИЯ</div>
+
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);display:block;margin-bottom:6px;">Тип операции</label>
+      <div style="display:flex;gap:8px;" id="typeGroup">
+        <button onclick="selectType(this,'income')"  class="type-btn active-type" style="flex:1;padding:9px;border-radius:8px;border:1px solid var(--green);background:rgba(46,213,115,0.12);color:var(--green);font-family:var(--font-body);font-weight:600;cursor:pointer;">📥 Приход</button>
+        <button onclick="selectType(this,'outcome')" class="type-btn" style="flex:1;padding:9px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);font-family:var(--font-body);font-weight:600;cursor:pointer;">📤 Расход</button>
+        <button onclick="selectType(this,'writeoff')" class="type-btn" style="flex:1;padding:9px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);font-family:var(--font-body);font-weight:600;cursor:pointer;">🗑 Списание</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);display:block;margin-bottom:6px;">Товар</label>
+      <select style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font-body);font-size:14px;padding:10px 12px;outline:none;">
+        <option>Бумага А4, 500 л (бл)</option>
+        <option>Ручки шариковые (уп)</option>
+        <option>Картридж HP 85A (шт)</option>
+        <option>Маркер перманентный (шт)</option>
+      </select>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);display:block;margin-bottom:6px;">Количество</label>
+        <input type="number" placeholder="0" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font-body);font-size:14px;padding:10px 12px;outline:none;" />
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);display:block;margin-bottom:6px;">Цена за ед., ₽</label>
+        <input type="number" placeholder="0.00" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font-body);font-size:14px;padding:10px 12px;outline:none;" />
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);display:block;margin-bottom:6px;">Комментарий</label>
+      <input type="text" placeholder="Необязательно..." style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font-body);font-size:14px;padding:10px 12px;outline:none;" />
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <button onclick="hideModal()" style="flex:1;padding:11px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;">Отмена</button>
+      <button onclick="submitOp()" style="flex:2;padding:11px;border-radius:8px;border:none;background:var(--accent);color:var(--bg);font-family:var(--font-body);font-size:14px;font-weight:700;cursor:pointer;">Сохранить операцию</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────
+// Загружаем данные с бэка
+async function loadDashboard() {
+  try {
+    const res = await fetch('/api/dashboard', { credentials: 'include' });
+    if (res.status === 401) {
+      window.location.href = '/login'; // не авторизован
+      return;
+    }
+    const data = await res.json();
+
+    // Карточки
+    document.getElementById('cnt-products').textContent = data.totalProducts;
+    document.getElementById('cnt-value').textContent =
+      (data.warehouseValue / 1_000_000).toFixed(1) + 'М';
+    document.getElementById('cnt-low').textContent = data.lowStockProducts.length;
+
+    // Последние операции
+    renderTransactions(data.recentTransactions);
+
+    // Низкий остаток
+    renderLowStock(data.lowStockProducts);
+
+  } catch (err) {
+    console.error('Ошибка загрузки дашборда:', err);
+  }
+}
+
+loadDashboard();
+// ─── RENDER ─────────────────────────────────────────────
+document.getElementById('todayDate').textContent =
+  new Date().toLocaleDateString('ru-RU', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+// Transactions
+const txBody = document.getElementById('txBody');
+TRANSACTIONS.forEach(tx => {
+  const typeLabel = {income:'Приход', outcome:'Расход', writeoff:'Списание'}[tx.type];
+  txBody.innerHTML += `
+    <tr>
+      <td><span class="tx-type ${tx.type}">${typeLabel}</span></td>
+      <td><div class="tx-product">${tx.product}</div><div class="tx-sku">${tx.sku}</div></td>
+      <td>${tx.qty}</td>
+      <td class="tx-amount">${tx.amount}</td>
+      <td class="tx-by">${tx.by}</td>
+      <td class="tx-by">${tx.time}</td>
+    </tr>`;
+});
+
+// Low stock
+const lowList = document.getElementById('lowList');
+LOW_STOCK.forEach(item => {
+  lowList.innerHTML += `
+    <div class="low-item">
+      <div class="low-icon">${item.icon}</div>
+      <div>
+        <div class="low-name">${item.name}</div>
+        <div class="low-sku">${item.sku}</div>
+      </div>
+      <div class="low-qty">
+        <div class="low-qty-val">${item.qty} шт</div>
+        <div class="low-qty-min">мин: ${item.min}</div>
+      </div>
+    </div>`;
+});
+
+// Categories
+const catRow = document.getElementById('catRow');
+CATEGORIES.forEach(cat => {
+  catRow.innerHTML += `
+    <div class="cat-pill">
+      ${cat.name} <span class="cat-count">${cat.count}</span>
+    </div>`;
+});
+
+// Chart
+(function renderChart() {
+  const svg = document.getElementById('chartSvg');
+  const W = 900, H = 160, PAD = { left:8, right:8, top:10, bottom:28 };
+  const n = CHART_DATA.labels.length;
+  const colW = (W - PAD.left - PAD.right) / n;
+  const barW = 18;
+  const maxVal = Math.max(...CHART_DATA.income, ...CHART_DATA.outcome, ...CHART_DATA.writeoff);
+  const scaleY = (H - PAD.top - PAD.bottom) / maxVal;
+
+  const colors = { income:'#2ed573', outcome:'#3d8bff', writeoff:'#ff4757' };
+  const keys   = ['income','outcome','writeoff'];
+  const offsets = [-barW - 2, 0, barW + 2];
+
+  let html = '';
+  CHART_DATA.labels.forEach((label, i) => {
+    const cx = PAD.left + i * colW + colW / 2;
+    html += `<g class="bar-group">`;
+    keys.forEach((key, ki) => {
+      const val = CHART_DATA[key][i];
+      const bh  = val * scaleY;
+      const bx  = cx + offsets[ki] - barW / 2;
+      const by  = H - PAD.bottom - bh;
+      html += `
+        <rect class="bar-rect" x="${bx}" y="${by}" width="${barW}" height="${bh}"
+          fill="${colors[key]}" rx="3" opacity="0.85"
+          style="transition:filter 0.2s"/>
+        <text class="bar-val" x="${bx + barW/2}" y="${by - 4}" text-anchor="middle">${val}</text>`;
+    });
+    html += `<text class="bar-label" x="${cx}" y="${H - 6}" text-anchor="middle">${label}</text>`;
+    html += `</g>`;
+  });
+  svg.innerHTML = html;
+})();
+
+// ─── MODAL ───────────────────────────────────────────────
+function showModal() {
+  document.getElementById('modal').style.display = 'flex';
+}
+function hideModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+function submitOp() {
+  hideModal();
+  // Здесь будет fetch('/api/transactions', { method:'POST', ... })
+  alert('Операция сохранена! (подключите API)');
+}
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) hideModal();
+});
+
+function selectType(btn, type) {
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.style.borderColor = 'var(--border)';
+    b.style.background  = 'none';
+    b.style.color       = 'var(--muted)';
+  });
+  const colors = { income:'var(--green)', outcome:'var(--blue)', writeoff:'var(--red)' };
+  btn.style.borderColor = colors[type];
+  btn.style.background  = colors[type].replace(')', ',0.12)').replace('var(','rgba(').replace('--green','46,213,115').replace('--blue','61,139,255').replace('--red','255,71,87');
+  btn.style.color       = colors[type];
+}
+
+// Sidebar active
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Search filter
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('#txBody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+
+// Counter animation
+function animateCount(el, target, suffix='') {
+  let current = 0;
+  const step = target / 30;
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = Math.round(current) + suffix;
+    if (current >= target) clearInterval(timer);
+  }, 30);
+}
+animateCount(document.getElementById('cnt-products'), 148);
+animateCount(document.getElementById('cnt-value'), 2.4, 'М');
+animateCount(document.getElementById('cnt-low'), 5);
+animateCount(document.getElementById('cnt-ops'), 23);
+</script>
+</body>
+</html>
