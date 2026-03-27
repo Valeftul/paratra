@@ -8,13 +8,13 @@ const router = Router();
 //  DASHBOARD  GET /api/dashboard
 // ════════════════════════════════════════════════
 router.get("/dashboard", requireAuth, (_req: Request, res: Response) => {
-  const products     = store.products;
+  const products = store.products;
   const transactions = store.transactions;
 
   const lowStock = products.filter(p => p.quantity <= p.minQuantity);
   const warehouseValue = products.reduce((s, p) => s + p.quantity * p.purchasePrice, 0);
 
-  const incomeSum  = transactions.filter(t => t.type === "income")
+  const incomeSum = transactions.filter(t => t.type === "income")
     .reduce((s, t) => s + t.total, 0);
   const outcomeSum = transactions.filter(t => t.type === "outcome")
     .reduce((s, t) => s + t.total, 0);
@@ -24,12 +24,12 @@ router.get("/dashboard", requireAuth, (_req: Request, res: Response) => {
     .slice(0, 10);
 
   res.json({
-    totalProducts:    products.length,
-    totalCategories:  [...new Set(products.map(p => p.category))].length,
+    totalProducts: products.length,
+    totalCategories: [...new Set(products.map(p => p.category))].length,
     lowStockProducts: lowStock,
     recentTransactions: recent,
-    totalIncome:      incomeSum,
-    totalOutcome:     outcomeSum,
+    totalIncome: incomeSum,
+    totalOutcome: outcomeSum,
     warehouseValue,
   });
 });
@@ -40,8 +40,8 @@ router.get("/dashboard", requireAuth, (_req: Request, res: Response) => {
 router.get("/products", requireAuth, (req: Request, res: Response) => {
   let list = [...store.products];
   const { search, category, lowStock } = req.query;
-  if (search)         list = list.filter(p => p.name.toLowerCase().includes(String(search).toLowerCase()) || p.sku.toLowerCase().includes(String(search).toLowerCase()));
-  if (category)       list = list.filter(p => p.category === String(category));
+  if (search) list = list.filter(p => p.name.toLowerCase().includes(String(search).toLowerCase()) || p.sku.toLowerCase().includes(String(search).toLowerCase()));
+  if (category) list = list.filter(p => p.category === String(category));
   if (lowStock === "true") list = list.filter(p => p.quantity <= p.minQuantity);
   list.sort((a, b) => a.name.localeCompare(b.name));
   res.json(list);
@@ -63,17 +63,17 @@ router.post("/products", requireAuth, (req: Request, res: Response) => {
     return res.status(409).json({ error: "Товар с таким артикулом уже существует" });
   }
   const product = {
-    id:            store.nextId("products"),
-    name:          data.name,
-    sku:           data.sku,
-    category:      data.category,
-    quantity:      Number(data.quantity) || 0,
-    unit:          data.unit || "шт",
+    id: store.nextId("products"),
+    name: data.name,
+    sku: data.sku,
+    category: data.category,
+    quantity: Number(data.quantity) || 0,
+    unit: data.unit || "шт",
     purchasePrice: Number(data.purchasePrice) || 0,
-    minQuantity:   Number(data.minQuantity) || 0,
-    supplier:      data.supplier || "",
-    description:   data.description || "",
-    updatedAt:     new Date().toISOString(),
+    minQuantity: Number(data.minQuantity) || 0,
+    supplier: data.supplier || "",
+    description: data.description || "",
+    updatedAt: new Date().toISOString(),
   };
   store.products.push(product);
   res.status(201).json(product);
@@ -114,13 +114,13 @@ router.post("/suppliers", requireAuth, (req: Request, res: Response) => {
   const data = req.body;
   if (!data.name) return res.status(400).json({ error: "Укажите название поставщика" });
   const supplier = {
-    id:        store.nextId("suppliers"),
-    name:      data.name,
-    contact:   data.contact || "",
-    phone:     data.phone || "",
-    email:     data.email || "",
-    address:   data.address || "",
-    comment:   data.comment || "",
+    id: store.nextId("suppliers"),
+    name: data.name,
+    contact: data.contact || "",
+    phone: data.phone || "",
+    email: data.email || "",
+    address: data.address || "",
+    comment: data.comment || "",
     createdAt: new Date().toISOString(),
   };
   store.suppliers.push(supplier);
@@ -150,15 +150,15 @@ router.get("/transactions", requireAuth, (req: Request, res: Response) => {
   if (type) list = list.filter(t => t.type === String(type));
   list.sort((a, b) => b.id - a.id);
 
-  const pageNum  = parseInt(String(page));
+  const pageNum = parseInt(String(page));
   const limitNum = parseInt(String(limit));
-  const total    = list.length;
-  const paginated = list.slice((pageNum-1)*limitNum, pageNum*limitNum);
+  const total = list.length;
+  const paginated = list.slice((pageNum - 1) * limitNum, pageNum * limitNum);
 
   res.json({
     transactions: paginated,
     total,
-    totalPages:  Math.ceil(total/limitNum),
+    totalPages: Math.ceil(total / limitNum),
     currentPage: pageNum,
   });
 });
@@ -180,27 +180,27 @@ router.post("/transactions", requireAuth, (req: Request, res: Response) => {
 
   // Обновляем количество товара
   const delta = type === "income" ? Number(quantity) : -Number(quantity);
-  const idx   = store.products.findIndex(p => p.id === product.id);
-  store.products[idx].quantity  += delta;
-  store.products[idx].updatedAt  = new Date().toISOString();
+  const idx = store.products.findIndex(p => p.id === product.id);
+  store.products[idx].quantity += delta;
+  store.products[idx].updatedAt = new Date().toISOString();
 
   // Получаем displayName пользователя из сессии если есть
   const by = (req as any).user?.displayName || "Администратор";
 
   const transaction = {
-    id:        store.nextId("transactions"),
-    type:      type as "income" | "outcome" | "writeoff",
-    product:   product.name,
-    sku:       product.sku,
+    id: store.nextId("transactions"),
+    type: type as "income" | "outcome" | "writeoff",
+    product: product.name,
+    sku: product.sku,
     productId: product.id,
-    quantity:  Number(quantity),
-    unit:      product.unit,
-    price:     Number(price),
-    total:     Number(quantity) * Number(price),
-    supplier:  supplier || "",
+    quantity: Number(quantity),
+    unit: product.unit,
+    price: Number(price),
+    total: Number(quantity) * Number(price),
+    supplier: supplier || "",
     by,
-    comment:   comment || "",
-    date:      new Date().toLocaleString("ru-RU", {
+    comment: comment || "",
+    date: new Date().toLocaleString("ru-RU", {
       day: "2-digit", month: "2-digit", year: "numeric",
       hour: "2-digit", minute: "2-digit",
     }),
@@ -226,7 +226,7 @@ router.get("/contracts", requireAuth, (req: Request, res: Response) => {
   });
 
   if (status) list = list.filter(c => c.status === String(status));
-  if (search)  list = list.filter(c => c.clientName.toLowerCase().includes(String(search).toLowerCase()));
+  if (search) list = list.filter(c => c.clientName.toLowerCase().includes(String(search).toLowerCase()));
   list.sort((a, b) => b.id - a.id);
   res.json(list);
 });
@@ -239,40 +239,47 @@ router.get("/contracts/:id", requireAuth, (req: Request, res: Response) => {
 
 router.post("/contracts", requireAuth, (req: Request, res: Response) => {
   const data = req.body;
-  const year  = new Date().getFullYear();
-  const num   = store.contracts.length + 1;
-  const end   = new Date(data.startDate);
+  const year = new Date().getFullYear();
+  const num = store.contracts.length + 1;
+  const end = new Date(data.startDate);
   end.setMonth(end.getMonth() + Number(data.durationMonths));
 
   const contract = {
-    id:                  store.nextId("contracts"),
-    number:              `ДХ-${year}-${String(num).padStart(4, "0")}`,
-    status:              "active" as const,
-    clientName:          data.clientName || "",
-    clientContact:       data.clientContact || "",
-    clientPhone:         data.clientPhone || "",
-    clientEmail:         data.clientEmail || "",
-    clientAddress:       data.clientAddress || "",
-    clientInn:           data.clientInn || "",
-    productName:         data.productName || "",
-    productSku:          data.productSku || "",
-    quantity:            Number(data.quantity) || 0,
-    unit:                data.unit || "шт",
-    purchasePrice:       Number(data.purchasePrice) || 0,
-    totalValue:          Number(data.quantity) * Number(data.purchasePrice),
-    storageArea:         Number(data.storageArea) || 0,
-    storageRate:         Number(data.storageRate) || 0,
+    id: store.nextId("contracts"),
+    number: `ДХ-${year}-${String(num).padStart(4, "0")}`,
+    status: "active" as const,
+    clientName: data.clientName || "",
+    clientContact: data.clientContact || "",
+    clientPhone: data.clientPhone || "",
+    clientEmail: data.clientEmail || "",
+    clientAddress: data.clientAddress || "",
+    clientInn: data.clientInn || "",
+    clientKpp: data.clientKpp || "",
+    clientOgrn: data.clientOgrn || "",
+    clientAccount: data.clientAccount || "",
+    clientBik: data.clientBik || "",
+    clientBank: data.clientBank || "",
+    clientKorr: data.clientKorr || "",
+    clientFactAddress: data.clientFactAddress || "",
+    productName: data.productName || "",
+    productSku: data.productSku || "",
+    quantity: Number(data.quantity) || 0,
+    unit: data.unit || "шт",
+    purchasePrice: Number(data.purchasePrice) || 0,
+    totalValue: Number(data.quantity) * Number(data.purchasePrice),
+    storageArea: Number(data.storageArea) || 0,
+    storageRate: Number(data.storageRate) || 0,
     storageCostPerMonth: Number(data.storageArea) * Number(data.storageRate),
-    durationMonths:      Number(data.durationMonths) || 0,
-    totalStorageCost:    Number(data.storageArea) * Number(data.storageRate) * Number(data.durationMonths),
-    startDate:           data.startDate || "",
-    endDate:             end.toISOString().split("T")[0],
-    penaltyType:         data.penaltyType || "percent",
-    penaltyPercent:      Number(data.penaltyPercent) || 1.5,
-    penaltyPerDay:       Number(data.penaltyPerDay) || 0,
-    maxPenalty:          Number(data.maxPenalty) || 0,
-    notes:               data.notes || "",
-    createdAt:           new Date().toISOString(),
+    durationMonths: Number(data.durationMonths) || 0,
+    totalStorageCost: Number(data.storageArea) * Number(data.storageRate) * Number(data.durationMonths),
+    startDate: data.startDate || "",
+    endDate: end.toISOString().split("T")[0],
+    penaltyType: data.penaltyType || "percent",
+    penaltyPercent: Number(data.penaltyPercent) || 1.5,
+    penaltyPerDay: Number(data.penaltyPerDay) || 0,
+    maxPenalty: Number(data.maxPenalty) || 0,
+    notes: data.notes || "",
+    createdAt: new Date().toISOString(),
   };
 
   store.contracts.push(contract);
@@ -283,17 +290,17 @@ router.put("/contracts/:id", requireAuth, (req: Request, res: Response) => {
   const idx = store.contracts.findIndex(c => c.id === Number(req.params.id));
   if (idx === -1) return res.status(404).json({ error: "Договор не найден" });
 
-  const data    = req.body;
+  const data = req.body;
   const updated = { ...store.contracts[idx], ...data, id: store.contracts[idx].id };
 
   // Пересчитываем поля если изменились
   if (data.quantity || data.purchasePrice) {
     updated.totalValue = (data.quantity || store.contracts[idx].quantity) *
-                         (data.purchasePrice || store.contracts[idx].purchasePrice);
+      (data.purchasePrice || store.contracts[idx].purchasePrice);
   }
   if (data.storageArea || data.storageRate || data.durationMonths) {
     updated.storageCostPerMonth = updated.storageArea * updated.storageRate;
-    updated.totalStorageCost    = updated.storageCostPerMonth * updated.durationMonths;
+    updated.totalStorageCost = updated.storageCostPerMonth * updated.durationMonths;
   }
   if (data.startDate || data.durationMonths) {
     const end = new Date(updated.startDate);
@@ -350,11 +357,11 @@ router.post("/public-requests", (req: Request, res: Response) => {
   }
   const request: PublicRequest = {
     id: nextReqId++,
-    clientName, clientPhone, clientEmail: clientEmail||'',
-    sectionId: sectionId||'', area: Number(area)||0,
-    storageRate: Number(storageRate)||0, periodMonths: Number(periodMonths)||0,
-    totalCost: Number(totalCost)||0, startDate: startDate||'',
-    comment: comment||'', status: 'new',
+    clientName, clientPhone, clientEmail: clientEmail || '',
+    sectionId: sectionId || '', area: Number(area) || 0,
+    storageRate: Number(storageRate) || 0, periodMonths: Number(periodMonths) || 0,
+    totalCost: Number(totalCost) || 0, startDate: startDate || '',
+    comment: comment || '', status: 'new',
     createdAt: new Date().toLocaleString("ru-RU"),
   };
   publicRequests.push(request);
