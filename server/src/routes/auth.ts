@@ -66,6 +66,7 @@ router.post("/login", async (req: Request, res: Response) => {
     return res.status(401).json({ error: "Неверный логин или пароль" });
   }
   (req.session as any).userId = user.id;
+  (req.session as any).displayName = user.displayName;
   res.json({
     message: "Вход выполнен",
     user: {
