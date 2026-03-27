@@ -13,6 +13,11 @@
     --red:#ff4757;--blue:#3d8bff;--text:#e8ecf4;--muted:#6b7599;
     --font-head:'Bebas Neue',sans-serif;--font-body:'Golos Text',sans-serif;
   }
+  [data-theme="light"] {
+  --bg:#f0f2f7;--surface:#ffffff;--surface2:#e8ecf4;--border:#d0d8e8;
+  --accent:#f0a500;--accent2:#e05c2a;--green:#1a9e52;--yellow:#d4a000;
+  --red:#d63045;--blue:#2a6fd4;--text:#1a1e2e;--muted:#6b7599;
+}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;min-height:100vh;display:flex;overflow-x:hidden}
   .sidebar{width:240px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
@@ -144,6 +149,7 @@
   <div class="topbar">
     <div class="page-title">ТОВАРЫ</div>
     <div class="topbar-right">
+      <button class="btn btn-ghost btn-sm" onclick="toggleTheme()" id="themeBtn">🌙</button>
       <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchInput" type="text" placeholder="Название или артикул..." /></div>
       <select class="select-input" id="categoryFilter"><option value="">Все категории</option></select>
       <select class="select-input" id="stockFilter">
@@ -432,6 +438,19 @@ function exportCSV(){
   a.download=`товары_${new Date().toISOString().slice(0,10)}.csv`;a.click();
   showToast('success','📥','CSV файл скачан');
 }
+// ТЕМА
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('theme',t);
+  document.getElementById('themeBtn').textContent=t==='light'?'🌙':'☀️';
+}
+(function(){
+  var t=localStorage.getItem('theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t==='light'?'🌙':'☀️';
+})();
 async function logout(){await fetch('/auth/logout',{method:'POST',credentials:'include'});location.href='/login';}
 function showToast(type,icon,text){
   const t=document.getElementById('toast');

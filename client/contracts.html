@@ -14,6 +14,11 @@
   --text:#e8ecf4;--muted:#6b7599;
   --font-head:'Bebas Neue',sans-serif;--font-body:'Golos Text',sans-serif;
 }
+[data-theme="light"] {
+  --bg:#f0f2f7;--surface:#ffffff;--surface2:#e8ecf4;--border:#d0d8e8;
+  --accent:#f0a500;--accent2:#e05c2a;--green:#1a9e52;--yellow:#d4a000;
+  --red:#d63045;--blue:#2a6fd4;--text:#1a1e2e;--muted:#6b7599;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;min-height:100vh;display:flex;overflow-x:hidden}
 
@@ -219,6 +224,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
   <div class="topbar">
     <div class="page-title">ДОГОВОРЫ ХРАНЕНИЯ</div>
     <div class="topbar-right">
+      <button class="btn btn-ghost btn-sm" onclick="toggleTheme()" id="themeBtn">🌙</button>
       <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchInput" type="text" placeholder="Поиск по клиенту..."/></div>
       <select class="select-input" id="statusFilter">
         <option value="">Все статусы</option>
@@ -268,7 +274,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
           <div class="field"><label>Телефон</label><input id="f_clientPhone" type="text" placeholder="+7 (495) 000-00-00"/></div>
           <div class="field"><label>Email</label><input id="f_clientEmail" type="text" placeholder="info@company.ru"/></div>
           <div class="field"><label>ИНН</label><input id="f_clientInn" type="text" placeholder="7700000000"/></div>
+          <div class="field"><label>КПП</label><input id="f_clientKpp" type="text" placeholder="770001001"/></div>
+          <div class="field"><label>ОГРН / ОГРНИП</label><input id="f_clientOgrn" type="text" placeholder="1027700000000"/></div>
+          <div class="field"><label>Расчётный счёт</label><input id="f_clientAccount" type="text" placeholder="40702810000000000000"/></div>
+          <div class="field"><label>БИК банка</label><input id="f_clientBik" type="text" placeholder="044525225"/></div>
+          <div class="field"><label>Банк</label><input id="f_clientBank" type="text" placeholder="ПАО Сбербанк"/></div>
+          <div class="field"><label>Корр. счёт</label><input id="f_clientKorr" type="text" placeholder="30101810400000000225"/></div>
           <div class="field span2"><label>Юридический адрес</label><input id="f_clientAddress" type="text" placeholder="г. Москва, ул. Примерная, д. 1"/></div>
+          <div class="field span2"><label>Фактический адрес (если отличается)</label><input id="f_clientFactAddress" type="text" placeholder="г. Москва, ул. Складская, д. 5"/></div>
         </div>
       </div>
 
@@ -702,7 +715,9 @@ function printContract(id) {
       <h3>1. Стороны договора</h3>
       <div class="doc-parties">
         <p><strong>Хранитель:</strong> ООО «СкладПро», адрес: г. Москва, Промышленная ул., д. 12, ИНН 7700000001</p>
-        <p><strong>Поклажедатель:</strong> ${c.clientName}${c.clientInn?', ИНН '+c.clientInn:''}${c.clientAddress?', адрес: '+c.clientAddress:''}</p>
+        <p><strong>Поклажедатель:</strong> ${c.clientName}${c.clientInn?', ИНН '+c.clientInn:''}${c.clientKpp?', КПП '+c.clientKpp:''}${c.clientOgrn?', ОГРН '+c.clientOgrn:''}</p>
+<p><strong>Адрес:</strong> ${c.clientAddress||'—'}${c.clientFactAddress&&c.clientFactAddress!==c.clientAddress?'; факт.: '+c.clientFactAddress:''}</p>
+${c.clientAccount?'<p><strong>Банк:</strong> '+c.clientBank+', р/с '+c.clientAccount+', БИК '+c.clientBik+', к/с '+c.clientKorr+'</p>':''}
         ${c.clientContact?'<p><strong>Контактное лицо:</strong> '+c.clientContact+(c.clientPhone?', тел.: '+c.clientPhone:'')+(c.clientEmail?', email: '+c.clientEmail:'')+'</p>':''}
       </div>
     </div>
@@ -777,6 +792,20 @@ function printContract(id) {
 function closePrint() {
   document.getElementById('printOverlay').classList.remove('open');
 }
+
+// ТЕМА
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('theme',t);
+  document.getElementById('themeBtn').textContent=t==='light'?'🌙':'☀️';
+}
+(function(){
+  var t=localStorage.getItem('theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t==='light'?'🌙':'☀️';
+})();
 
 // ─── УТИЛИТЫ ────────────────────────────────────────────────
 async function logout() { await fetch('/auth/logout',{method:'POST',credentials:'include'}); location.href='/login'; }

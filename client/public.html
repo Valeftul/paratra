@@ -13,6 +13,11 @@
   --text:#e8ecf4;--muted:#5a6380;
   --font-head:'Bebas Neue',sans-serif;--font-body:'Golos Text',sans-serif;
 }
+[data-theme="light"] {
+  --bg:#f0f2f7;--surface:#ffffff;--surface2:#e8ecf4;--border:#d0d8e8;
+  --accent:#f0a500;--accent2:#e05c2a;--green:#1a9e52;--yellow:#d4a000;
+  --red:#d63045;--blue:#2a6fd4;--text:#1a1e2e;--muted:#6b7599;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden}
@@ -212,6 +217,8 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
     <a href="#features">Услуги</a>
     <a href="#warehouse" class="header-btn">Арендовать</a>
   </nav>
+  <!-- ДОБАВИТЬ в topbar-right -->
+<button class="btn btn-ghost btn-sm" onclick="toggleTheme()" id="themeBtn">🌙</button>
   <a class="admin-link" href="/">⚙ Управление</a>
 </header>
 
@@ -825,13 +832,54 @@ function openModal() {
 function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
 
 async function submitOrder() {
-  var name  = document.getElementById('m_name').value.trim();
-  var phone = document.getElementById('m_phone').value.trim();
+  var name    = document.getElementById('m_name').value.trim();
+  var phone   = document.getElementById('m_phone').value.trim();
+  var email   = document.getElementById('m_email').value.trim();
+  var comment = document.getElementById('m_comment').value.trim();
   if (!name||!phone) { showToast('error','⚠️','Заполните имя и телефон'); return; }
-  await new Promise(function(r){ setTimeout(r,600); });
+
+  var area  = selectedSec ? SECTIONS[selectedSec].area : 0;
+  var rate  = getRate(currentPeriod);
+  var disc  = getDisc(currentPeriod);
+  var base  = area * rate * currentPeriod;
+  var total = base - Math.round(base*disc/100);
+  var sd    = document.getElementById('startDate').value;
+
+  try {
+    await fetch('/api/public-requests', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        clientName:    name,
+        clientPhone:   phone,
+        clientEmail:   email,
+        sectionId:     selectedSec||'',
+        area:          area,
+        storageRate:   rate,
+        periodMonths:  currentPeriod,
+        totalCost:     total,
+        startDate:     sd,
+        comment:       comment,
+      })
+    });
+  } catch(e) { /* офлайн — всё равно показываем успех */ }
+
   document.getElementById('modalForm').style.display='none';
   document.getElementById('successScreen').style.display='flex';
 }
+// ТЕМА
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('theme',t);
+  document.getElementById('themeBtn').textContent=t==='light'?'🌙':'☀️';
+}
+(function(){
+  var t=localStorage.getItem('theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t==='light'?'🌙':'☀️';
+})();
 
 // ─── УТИЛИТЫ ─────────────────────────────────────────────────
 function showToast(type,icon,text){

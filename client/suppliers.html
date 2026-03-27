@@ -9,6 +9,11 @@
 <style>
   :root{--bg:#0f1117;--surface:#181c27;--surface2:#1f2538;--border:#2a3050;--accent:#f0a500;--accent2:#e05c2a;--green:#2ed573;--yellow:#ffd32a;--red:#ff4757;--blue:#3d8bff;--text:#e8ecf4;--muted:#6b7599;--font-head:'Bebas Neue',sans-serif;--font-body:'Golos Text',sans-serif;}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  [data-theme="light"] {
+  --bg:#f0f2f7;--surface:#ffffff;--surface2:#e8ecf4;--border:#d0d8e8;
+  --accent:#f0a500;--accent2:#e05c2a;--green:#1a9e52;--yellow:#d4a000;
+  --red:#d63045;--blue:#2a6fd4;--text:#1a1e2e;--muted:#6b7599;
+}
   body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;min-height:100vh;display:flex;overflow-x:hidden}
   .sidebar{width:240px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
   .logo{padding:28px 24px 20px;border-bottom:1px solid var(--border)}
@@ -176,6 +181,7 @@
   <div class="topbar">
     <div class="page-title">ПОСТАВЩИКИ</div>
     <div class="topbar-right">
+      <button class="btn btn-ghost btn-sm" onclick="toggleTheme()" id="themeBtn">🌙</button>
       <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchInput" type="text" placeholder="Поиск поставщика..." /></div>
       <button class="btn btn-primary" onclick="openModal()">+ Добавить поставщика</button>
     </div>
@@ -489,6 +495,20 @@ async function saveSupplier(){
   if(editingId&&selectedId===editingId)selectSupplier(editingId);
   showToast('success','✅',editingId?'Поставщик обновлён':'Поставщик добавлен');
 }
+
+// ТЕМА
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('theme',t);
+  document.getElementById('themeBtn').textContent=t==='light'?'🌙':'☀️';
+}
+(function(){
+  var t=localStorage.getItem('theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t==='light'?'🌙':'☀️';
+})();
 
 async function logout(){await fetch('/auth/logout',{method:'POST',credentials:'include'});location.href='/login';}
 function showToast(type,icon,text){

@@ -22,6 +22,11 @@
     --font-head: 'Bebas Neue', sans-serif;
     --font-body: 'Golos Text', sans-serif;
   }
+  [data-theme="light"] {
+  --bg:#f0f2f7;--surface:#ffffff;--surface2:#e8ecf4;--border:#d0d8e8;
+  --accent:#f0a500;--accent2:#e05c2a;--green:#1a9e52;--yellow:#d4a000;
+  --red:#d63045;--blue:#2a6fd4;--text:#1a1e2e;--muted:#6b7599;
+}
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -535,6 +540,8 @@
       <div class="nav-label">Отчёты</div>
       <a class="nav-item" href="/analytics"><span class="nav-icon">📊</span> Аналитика</a>
       <a class="nav-item" href="/contracts"><span class="nav-icon">📄</span> Договоры</a>
+      <a class="nav-item" href="/public-requests"><span class="nav-icon">📨</span> Заявки</a>
+      <a class="nav-item" href="/finanses"><span class="nav-icon">📨</span> Финансы</a>
       <a class="nav-item" onclick="setActive(this)">
         <span class="nav-icon">📋</span> Экспорт
       </a>
@@ -567,6 +574,7 @@
   <div class="topbar">
     <div class="page-title">ДАШБОРД</div>
     <div class="topbar-right">
+      <button class="btn btn-ghost btn-sm" onclick="toggleTheme()" id="themeBtn">🌙</button>
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
         <input class="search-input" type="text" placeholder="Поиск товара..." id="searchInput" />
@@ -882,6 +890,20 @@ document.getElementById('searchInput').addEventListener('input', function() {
     row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
 });
+
+// ТЕМА
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('theme',t);
+  document.getElementById('themeBtn').textContent=t==='light'?'🌙':'☀️';
+}
+(function(){
+  var t=localStorage.getItem('theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t==='light'?'🌙':'☀️';
+})();
 
 // Counter animation
 function animateCount(el, target, suffix='') {

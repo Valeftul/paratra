@@ -22,6 +22,11 @@
     --font-head: 'Bebas Neue', sans-serif;
     --font-body: 'Golos Text', sans-serif;
   }
+  [data-theme="light"] {
+  --bg:#f0f2f7;--surface:#ffffff;--surface2:#e8ecf4;--border:#d0d8e8;
+  --accent:#f0a500;--accent2:#e05c2a;--green:#1a9e52;--yellow:#d4a000;
+  --red:#d63045;--blue:#2a6fd4;--text:#1a1e2e;--muted:#6b7599;
+}
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background: var(--bg); color: var(--text);
@@ -307,6 +312,7 @@
   <div class="topbar">
     <div class="page-title">ОПЕРАЦИИ</div>
     <div class="topbar-right">
+      <button class="btn btn-ghost btn-sm" onclick="toggleTheme()" id="themeBtn">🌙</button>
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
         <input class="search-input" id="searchInput" type="text" placeholder="Поиск по товару..." />
@@ -779,9 +785,28 @@ async function saveTransaction() {
     });
     if (res.ok) {
       const created = await res.json();
-      transactions.unshift(created);
+      // Нормализуем поля из бэка
+      const tx = {
+        id: created.id,
+        type: created.type,
+        product: created.product?.name || created.product || productName,
+        sku: created.sku || created.product?.sku || productSku,
+        qty: created.quantity,
+        unit: created.unit || created.product?.unit || unit,
+        price: created.price,
+        total: created.total || created.totalAmount || (created.quantity * created.price),
+        supplier: created.supplier?.name || created.supplier || data.supplier,
+        by: created.createdBy?.displayName || created.by || 'Вы',
+        date: created.date || created.createdAt || new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+        comment: created.comment || data.comment,
+      };
+      transactions.unshift(tx);
+      // Обновляем список товаров для селекта
+      await loadProducts();
     } else {
-      throw new Error();
+      const err = await res.json().catch(()=>({}));
+      showToast('error','⚠️', err.error || 'Ошибка сервера');
+      return;
     }
   } catch {
     // Мок
@@ -835,6 +860,20 @@ function showToast(type, icon, text) {
   t.className = `toast ${type} show`;
   setTimeout(() => t.classList.remove('show'), 3000);
 }
+
+// ТЕМА
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('theme',t);
+  document.getElementById('themeBtn').textContent=t==='light'?'🌙':'☀️';
+}
+(function(){
+  var t=localStorage.getItem('theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t==='light'?'🌙':'☀️';
+})();
 
 document.getElementById('searchInput').addEventListener('input', applyFilters);
 document.getElementById('dateFrom').addEventListener('change', applyFilters);
