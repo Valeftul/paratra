@@ -7,7 +7,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
     return res.status(401).json({ error: "Необходима авторизация" });
   }
   // Кладём userId в req для использования в роутах
-  (req as any).user = { id: userId };
+  (req as any).user = { id: userId, _id: userId, displayName: (req.session as any).displayName };
   next();
 }
 
