@@ -320,4 +320,58 @@ router.get("/categories", requireAuth, (_req: Request, res: Response) => {
   res.json(cats.map(name => ({ name, count: store.products.filter(p => p.category === name).length })));
 });
 
+// ════════════════════════════════════════════════
+//  ЗАЯВКИ С PUBLIC СТРАНИЦЫ
+// ════════════════════════════════════════════════
+interface PublicRequest {
+  id: number;
+  clientName: string;
+  clientPhone: string;
+  clientEmail: string;
+  sectionId: string;
+  area: number;
+  storageRate: number;
+  periodMonths: number;
+  totalCost: number;
+  startDate: string;
+  comment: string;
+  status: 'new' | 'processing' | 'converted' | 'rejected';
+  createdAt: string;
+}
+
+const publicRequests: PublicRequest[] = [];
+let nextReqId = 1;
+
+// POST /api/public-requests — принять заявку с public.html (без авторизации)
+router.post("/public-requests", (req: Request, res: Response) => {
+  const { clientName, clientPhone, clientEmail, sectionId, area, storageRate, periodMonths, totalCost, startDate, comment } = req.body;
+  if (!clientName || !clientPhone) {
+    return res.status(400).json({ error: "Укажите имя и телефон" });
+  }
+  const request: PublicRequest = {
+    id: nextReqId++,
+    clientName, clientPhone, clientEmail: clientEmail||'',
+    sectionId: sectionId||'', area: Number(area)||0,
+    storageRate: Number(storageRate)||0, periodMonths: Number(periodMonths)||0,
+    totalCost: Number(totalCost)||0, startDate: startDate||'',
+    comment: comment||'', status: 'new',
+    createdAt: new Date().toLocaleString("ru-RU"),
+  };
+  publicRequests.push(request);
+  res.status(201).json({ message: "Заявка принята", id: request.id });
+});
+
+// GET /api/public-requests — список заявок для админки
+router.get("/public-requests", requireAuth, (_req: Request, res: Response) => {
+  res.json([...publicRequests].reverse());
+});
+
+// PUT /api/public-requests/:id — сменить статус заявки
+router.put("/public-requests/:id", requireAuth, (req: Request, res: Response) => {
+  const r = publicRequests.find(x => x.id === Number(req.params.id));
+  if (!r) return res.status(404).json({ error: "Заявка не найдена" });
+  Object.assign(r, req.body, { id: r.id });
+  res.json(r);
+});
+
 export default router;
