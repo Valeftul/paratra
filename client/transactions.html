@@ -551,7 +551,7 @@ async function loadProducts() {
 
   const sel = document.getElementById('f_product');
   sel.innerHTML = '<option value="">Выберите товар</option>' +
-    products.map(p => `<option value="${p.id}" data-price="${p.purchasePrice}" data-unit="${p.unit}">${p.name} (${p.sku})</option>`).join('');
+  products.map(p => `<option value="${p._id || p.id}" data-price="${p.purchasePrice}" data-unit="${p.unit}">${p.name} (${p.sku})</option>`)
 }
 
 async function loadTransactions() {
