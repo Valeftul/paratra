@@ -227,7 +227,11 @@
         </div>
         <div class="field"><label>Цена закупки, ₽ *</label><input id="f_purchasePrice" type="number" placeholder="0.00" min="0" step="0.01" /></div>
         <div class="field"><label>Минимальный остаток</label><input id="f_minQuantity" type="number" placeholder="0" min="0" /></div>
-        <div class="field"><label>Поставщик</label><input id="f_supplier" type="text" placeholder="Название поставщика" /></div>
+        <div class="field"><label>Поставщик</label>
+          <select id="f_supplier">
+            <option value="">— Выберите поставщика —</option>
+          </select>
+        </div>
         <div class="field span2"><label>Описание</label><textarea id="f_description" rows="2" placeholder="Необязательно..."></textarea></div>
       </div>
     </div>
@@ -298,6 +302,7 @@ async function init(){
     document.getElementById('userAvatar').textContent=user.displayName.slice(0,2).toUpperCase();
   }catch{location.href='/login';return;}
   await loadProducts();
+  await loadSuppliersForModal();
 }
 
 async function loadProducts(){
@@ -307,6 +312,17 @@ async function loadProducts(){
     products=res.ok?await res.json():MOCK;
   }catch{products=MOCK;}
   applyFilters();updateStats();updateCategoryFilter();
+}
+
+async function loadSuppliersForModal() {
+  try {
+    const res = await fetch('/api/suppliers', { credentials: 'include' });
+    const list = res.ok ? await res.json() : [];
+    const sel = document.getElementById('f_supplier');
+    const current = sel.value;
+    sel.innerHTML = '<option value="">— Выберите поставщика —</option>' +
+      list.map(s => `<option value="${s.name}" ${s.name === current ? 'selected' : ''}>${s.name}</option>`).join('');
+  } catch(e) {}
 }
 
 function applyFilters(){
