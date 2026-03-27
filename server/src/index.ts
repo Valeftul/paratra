@@ -49,7 +49,7 @@ app.get("/", (_req, res) => {
 
 // Страницы фронтенда
 const pages = ["dashboard", "products", "transactions", "suppliers",
-  "analytics", "contracts", "login", "public", "finances", "finanses"];
+  "analytics", "contracts", "login", "public", "finances", "public-requests"];
 pages.forEach(page => {
   app.get(`/${page}`, (_req, res) => {
     res.sendFile(path.resolve(__dirname, `../../client/${page}.html`));
