@@ -23,10 +23,10 @@
     --font-body: 'Golos Text', sans-serif;
   }
   [data-theme="light"] {
-  --bg:#f0f2f7;--surface:#ffffff;--surface2:#e8ecf4;--border:#d0d8e8;
-  --accent:#f0a500;--accent2:#e05c2a;--green:#1a9e52;--yellow:#d4a000;
-  --red:#d63045;--blue:#2a6fd4;--text:#1a1e2e;--muted:#6b7599;
-}
+    --bg:#f0f2f7;--surface:#ffffff;--surface2:#e8ecf4;--border:#d0d8e8;
+    --accent:#f0a500;--accent2:#e05c2a;--green:#1a9e52;--yellow:#d4a000;
+    --red:#d63045;--blue:#2a6fd4;--text:#1a1e2e;--muted:#6b7599;
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background: var(--bg); color: var(--text);
@@ -60,7 +60,6 @@
     width: 3px; background: var(--accent); border-radius: 0 3px 3px 0;
   }
   .nav-icon { font-size: 18px; width: 22px; text-align: center; flex-shrink: 0; }
-  .nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; }
   .sidebar-user { padding: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
   .avatar { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: var(--bg); flex-shrink: 0; }
   .user-info { flex: 1; min-width: 0; }
@@ -180,10 +179,6 @@
   .product-name { font-weight: 600; }
   .product-sku  { font-size: 11px; color: var(--muted); font-family: monospace; }
   .qty-cell     { font-weight: 600; font-variant-numeric: tabular-nums; }
-  .amount-cell  { font-weight: 700; font-variant-numeric: tabular-nums; }
-  .amount-cell.income  { color: var(--green); }
-  .amount-cell.outcome { color: var(--blue); }
-  .amount-cell.writeoff{ color: var(--red); }
   .by-cell, .date-cell { font-size: 12px; color: var(--muted); }
   .comment-cell { font-size: 12px; color: var(--muted); max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -206,7 +201,7 @@
   /* ─── MODAL ─── */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 500px; max-width: 100%; animation: fadeUp 0.3s ease; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 480px; max-width: 100%; animation: fadeUp 0.3s ease; }
   .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
   .modal-title { font-family: var(--font-head); font-size: 22px; letter-spacing: 1px; }
   .modal-close { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 20px; padding: 4px; transition: color 0.2s; }
@@ -237,16 +232,6 @@
   }
   .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
   .field input::placeholder { color: var(--muted); }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-  /* Итого */
-  .total-row {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 14px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .total-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-  .total-val { font-family: var(--font-head); font-size: 26px; letter-spacing: 1px; color: var(--accent); }
 
   /* ─── TOAST ─── */
   .toast { position: fixed; bottom: 24px; right: 24px; z-index: 400; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; pointer-events: none; min-width: 260px; }
@@ -261,7 +246,6 @@
     .sidebar{display:none} .content{padding:16px} .topbar{padding:14px 16px}
     .stats-row{grid-template-columns:1fr 1fr}
     .type-tabs{flex-wrap:wrap}
-    .two-col{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -282,7 +266,7 @@
     </div>
     <div class="nav-section">
       <div class="nav-label">Справочники</div>
-      <a class="nav-item" href="/suppliers"><span class="nav-icon">🚚</span> Поставщики</a>
+      <a class="nav-item" href="/suppliers"><span class="nav-icon">👥</span> Клиенты</a>
     </div>
     <div class="nav-section">
       <div class="nav-label">Клиенты</div>
@@ -330,19 +314,19 @@
         <span class="stat-icon">📥</span>
         <div class="stat-label">Приходов (всего)</div>
         <div class="stat-val" id="statIncome">0</div>
-        <div class="stat-sub" id="statIncomeSum">на 0 ₽</div>
+        <div class="stat-sub" id="statIncomeInfo">операций</div>
       </div>
       <div class="stat-card blue">
         <span class="stat-icon">📤</span>
         <div class="stat-label">Расходов (всего)</div>
         <div class="stat-val" id="statOutcome">0</div>
-        <div class="stat-sub" id="statOutcomeSum">на 0 ₽</div>
+        <div class="stat-sub" id="statOutcomeInfo">операций</div>
       </div>
       <div class="stat-card red">
         <span class="stat-icon">🗑️</span>
         <div class="stat-label">Списаний (всего)</div>
         <div class="stat-val" id="statWriteoff">0</div>
-        <div class="stat-sub" id="statWriteoffSum">на 0 ₽</div>
+        <div class="stat-sub" id="statWriteoffInfo">операций</div>
       </div>
       <div class="stat-card yellow">
         <span class="stat-icon">📊</span>
@@ -385,9 +369,7 @@
               <th>Тип</th>
               <th>Товар</th>
               <th>Количество</th>
-              <th>Цена за ед.</th>
-              <th>Сумма</th>
-              <th>Поставщик</th>
+              <th>Клиент / Поставщик</th>
               <th>Кто</th>
               <th>Дата / Время</th>
               <th>Комментарий</th>
@@ -444,28 +426,18 @@
         </select>
       </div>
 
-      <div class="two-col">
-        <div class="field">
-          <label>Количество *</label>
-          <input id="f_qty" type="number" placeholder="0" min="1" oninput="calcTotal()" />
-        </div>
-        <div class="field">
-          <label>Цена за единицу, ₽ *</label>
-          <input id="f_price" type="number" placeholder="0.00" min="0" step="0.01" oninput="calcTotal()" />
-        </div>
+      <!-- Количество (цена скрыта — передаётся автоматически) -->
+      <div class="field">
+        <label>Количество *</label>
+        <input id="f_qty" type="number" placeholder="0" min="1" />
       </div>
+      <input id="f_price" type="hidden" value="0" />
 
-      <!-- Итого -->
-      <div class="total-row">
-        <div class="total-label">Итого сумма</div>
-        <div class="total-val" id="totalDisplay">0 ₽</div>
-      </div>
-
-      <!-- Поставщик (только для прихода) -->
+      <!-- Клиент / Поставщик -->
       <div class="field" id="supplierField">
-        <label>Поставщик</label>
+        <label>Клиент / Поставщик</label>
         <select id="f_supplier">
-          <option value="">— Выберите поставщика —</option>
+          <option value="">— Выберите —</option>
         </select>
       </div>
 
@@ -501,31 +473,29 @@ let selectedType = 'income';
 
 // ─── МОКОВЫЕ ДАННЫЕ ───────────────────────────────────────
 const MOCK_PRODUCTS = [
-  { id:1, name:'Бумага А4, 500 листов', sku:'PAP-001', unit:'бл', purchasePrice:180, salePrice:250 },
-  { id:2, name:'Ручки шариковые синие', sku:'PEN-042', unit:'уп', purchasePrice:90,  salePrice:150 },
-  { id:3, name:'Картридж HP 85A',       sku:'INK-017', unit:'шт', purchasePrice:900, salePrice:1400 },
-  { id:4, name:'Маркер перманентный',   sku:'MRK-008', unit:'шт', purchasePrice:35,  salePrice:65  },
-  { id:5, name:'Скрепки 50 мм (кор)',   sku:'CLP-003', unit:'кор',purchasePrice:25,  salePrice:50  },
-  { id:6, name:'Папки-регистраторы А4', sku:'FLD-022', unit:'шт', purchasePrice:85,  salePrice:130 },
+  { id:1, name:'Бумага А4, 500 листов', sku:'PAP-001', unit:'бл', purchasePrice:180 },
+  { id:2, name:'Ручки шариковые синие', sku:'PEN-042', unit:'уп', purchasePrice:90  },
+  { id:3, name:'Картридж HP 85A',       sku:'INK-017', unit:'шт', purchasePrice:900 },
+  { id:4, name:'Маркер перманентный',   sku:'MRK-008', unit:'шт', purchasePrice:35  },
+  { id:5, name:'Скрепки 50 мм (кор)',   sku:'CLP-003', unit:'кор',purchasePrice:25  },
+  { id:6, name:'Папки-регистраторы А4', sku:'FLD-022', unit:'шт', purchasePrice:85  },
 ];
 
 const now = new Date();
-const fmt = (d) => d.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+const fmtDate = (d) => d.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
 const daysAgo = (n) => { const d = new Date(now); d.setDate(d.getDate()-n); return d; };
 
 const MOCK_TX = [
-  { id:1,  type:'income',   product:'Бумага А4, 500 листов', sku:'PAP-001', qty:50,  unit:'бл',  price:180, total:9000,  supplier:'ОфисСнаб',  by:'Алексей И.', date: fmt(daysAgo(0)),  comment:'' },
-  { id:2,  type:'outcome',  product:'Ручки шариковые синие', sku:'PEN-042', qty:10,  unit:'уп',  price:150, total:1500,  supplier:'',           by:'Мария С.',   date: fmt(daysAgo(0)),  comment:'Для отдела продаж' },
-  { id:3,  type:'writeoff', product:'Картридж HP 85A',       sku:'INK-017', qty:2,   unit:'шт',  price:900, total:1800,  supplier:'',           by:'Алексей И.', date: fmt(daysAgo(0)),  comment:'Закончился ресурс' },
-  { id:4,  type:'income',   product:'Маркер перманентный',   sku:'MRK-008', qty:100, unit:'шт',  price:35,  total:3500,  supplier:'КанцОпт',    by:'Иван П.',    date: fmt(daysAgo(1)),  comment:'' },
-  { id:5,  type:'outcome',  product:'Скрепки 50 мм (кор)',   sku:'CLP-003', qty:5,   unit:'кор', price:50,  total:250,   supplier:'',           by:'Мария С.',   date: fmt(daysAgo(1)),  comment:'' },
-  { id:6,  type:'income',   product:'Папки-регистраторы А4', sku:'FLD-022', qty:20,  unit:'шт',  price:85,  total:1700,  supplier:'ОфисСнаб',   by:'Иван П.',    date: fmt(daysAgo(2)),  comment:'' },
-  { id:7,  type:'outcome',  product:'Бумага А4, 500 листов', sku:'PAP-001', qty:15,  unit:'бл',  price:250, total:3750,  supplier:'',           by:'Алексей И.', date: fmt(daysAgo(3)),  comment:'Бухгалтерия' },
-  { id:8,  type:'writeoff', product:'Маркер перманентный',   sku:'MRK-008', qty:5,   unit:'шт',  price:35,  total:175,   supplier:'',           by:'Мария С.',   date: fmt(daysAgo(4)),  comment:'Пересохли' },
-  { id:9,  type:'income',   product:'Картридж HP 85A',       sku:'INK-017', qty:5,   unit:'шт',  price:900, total:4500,  supplier:'ТехноДом',   by:'Иван П.',    date: fmt(daysAgo(5)),  comment:'Срочная закупка' },
-  { id:10, type:'outcome',  product:'Ручки шариковые синие', sku:'PEN-042', qty:8,   unit:'уп',  price:150, total:1200,  supplier:'',           by:'Алексей И.', date: fmt(daysAgo(6)),  comment:'' },
-  { id:11, type:'income',   product:'Скрепки 50 мм (кор)',   sku:'CLP-003', qty:30,  unit:'кор', price:25,  total:750,   supplier:'КанцОпт',    by:'Иван П.',    date: fmt(daysAgo(7)),  comment:'' },
-  { id:12, type:'outcome',  product:'Папки-регистраторы А4', sku:'FLD-022', qty:12,  unit:'шт',  price:130, total:1560,  supplier:'',           by:'Мария С.',   date: fmt(daysAgo(8)),  comment:'HR отдел' },
+  { id:1,  type:'income',   product:'Бумага А4, 500 листов', sku:'PAP-001', qty:50,  unit:'бл',  supplier:'ООО Ромашка',    by:'Алексей И.', date: fmtDate(daysAgo(0)),  comment:'' },
+  { id:2,  type:'outcome',  product:'Ручки шариковые синие', sku:'PEN-042', qty:10,  unit:'уп',  supplier:'',               by:'Мария С.',   date: fmtDate(daysAgo(0)),  comment:'Для отдела продаж' },
+  { id:3,  type:'writeoff', product:'Картридж HP 85A',       sku:'INK-017', qty:2,   unit:'шт',  supplier:'',               by:'Алексей И.', date: fmtDate(daysAgo(0)),  comment:'Закончился ресурс' },
+  { id:4,  type:'income',   product:'Маркер перманентный',   sku:'MRK-008', qty:100, unit:'шт',  supplier:'ИП Сидоров',     by:'Иван П.',    date: fmtDate(daysAgo(1)),  comment:'' },
+  { id:5,  type:'outcome',  product:'Скрепки 50 мм (кор)',   sku:'CLP-003', qty:5,   unit:'кор', supplier:'',               by:'Мария С.',   date: fmtDate(daysAgo(1)),  comment:'' },
+  { id:6,  type:'income',   product:'Папки-регистраторы А4', sku:'FLD-022', qty:20,  unit:'шт',  supplier:'ООО Ромашка',    by:'Иван П.',    date: fmtDate(daysAgo(2)),  comment:'' },
+  { id:7,  type:'outcome',  product:'Бумага А4, 500 листов', sku:'PAP-001', qty:15,  unit:'бл',  supplier:'',               by:'Алексей И.', date: fmtDate(daysAgo(3)),  comment:'Бухгалтерия' },
+  { id:8,  type:'writeoff', product:'Маркер перманентный',   sku:'MRK-008', qty:5,   unit:'шт',  supplier:'',               by:'Мария С.',   date: fmtDate(daysAgo(4)),  comment:'Пересохли' },
+  { id:9,  type:'income',   product:'Картридж HP 85A',       sku:'INK-017', qty:5,   unit:'шт',  supplier:'ООО Техника',    by:'Иван П.',    date: fmtDate(daysAgo(5)),  comment:'Срочная закупка' },
+  { id:10, type:'outcome',  product:'Ручки шариковые синие', sku:'PEN-042', qty:8,   unit:'уп',  supplier:'',               by:'Алексей И.', date: fmtDate(daysAgo(6)),  comment:'' },
 ];
 
 // ─── ИНИЦИАЛИЗАЦИЯ ─────────────────────────────────────────
@@ -539,7 +509,7 @@ async function init() {
     document.getElementById('userAvatar').textContent = user.displayName.slice(0,2).toUpperCase();
   } catch { window.location.href = '/login'; return; }
 
-await loadSuppliers();
+  await loadSuppliers();
   await loadProducts();
   await loadTransactions();
 }
@@ -552,7 +522,7 @@ async function loadProducts() {
 
   const sel = document.getElementById('f_product');
   sel.innerHTML = '<option value="">Выберите товар</option>' +
-  products.map(p => `<option value="${p._id || p.id}" data-price="${p.purchasePrice}" data-unit="${p.unit}">${p.name} (${p.sku})</option>`)
+    products.map(p => `<option value="${p._id || p.id}" data-price="${p.purchasePrice}" data-unit="${p.unit}">${p.name} (${p.sku})</option>`).join('');
 }
 
 async function loadSuppliers() {
@@ -560,15 +530,14 @@ async function loadSuppliers() {
     const res = await fetch('/api/suppliers', { credentials:'include' });
     const list = res.ok ? await res.json() : [];
     const fallback = list.length ? list : [
-      {name:'ОфисСнаб'},{name:'КанцОпт'},{name:'ТехноДом'},
-      {name:'МебельОпт'},{name:'УпакСнаб'},{name:'ПоставщикПлюс'}
+      {name:'ООО Ромашка'},{name:'ИП Сидоров'},{name:'ООО Техника'}
     ];
     const sel = document.getElementById('f_supplier');
-    sel.innerHTML = '<option value="">— Выберите поставщика —</option>' +
+    sel.innerHTML = '<option value="">— Выберите —</option>' +
       fallback.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
   } catch {
     const sel = document.getElementById('f_supplier');
-    ['ОфисСнаб','КанцОпт','ТехноДом','МебельОпт','УпакСнаб','ПоставщикПлюс']
+    ['ООО Ромашка','ИП Сидоров','ООО Техника']
       .forEach(n => sel.innerHTML += `<option value="${n}">${n}</option>`);
   }
 }
@@ -589,12 +558,10 @@ async function loadTransactions() {
 // ─── ФИЛЬТРАЦИЯ ────────────────────────────────────────────
 function applyFilters() {
   const search   = document.getElementById('searchInput').value.toLowerCase();
-  const dateFrom = document.getElementById('dateFrom').value;
-  const dateTo   = document.getElementById('dateTo').value;
 
   filtered = transactions.filter(t => {
     const matchType    = !typeFilter || t.type === typeFilter;
-    const matchSearch  = !search || t.product.toLowerCase().includes(search) || (t.sku||'').toLowerCase().includes(search);
+    const matchSearch  = !search || (t.product||'').toLowerCase().includes(search) || (t.sku||'').toLowerCase().includes(search);
     return matchType && matchSearch;
   });
 
@@ -605,9 +572,7 @@ function applyFilters() {
 
 function setTypeFilter(type, el) {
   typeFilter = type;
-  document.querySelectorAll('.type-tab').forEach(t => {
-    t.className = 'type-tab';
-  });
+  document.querySelectorAll('.type-tab').forEach(t => { t.className = 'type-tab'; });
   const cls = type ? `active-${type}` : 'active-all';
   el.classList.add(cls);
   applyFilters();
@@ -624,19 +589,17 @@ function updateStats() {
   const inc  = transactions.filter(t => t.type === 'income');
   const out  = transactions.filter(t => t.type === 'outcome');
   const wrt  = transactions.filter(t => t.type === 'writeoff');
-  const sum  = (arr) => arr.reduce((s,t) => s+(t.total||t.totalAmount||0), 0);
-  const fmt2 = (n) => n >= 1000000 ? (n/1000000).toFixed(1)+'М' : n >= 1000 ? Math.round(n/1000)+'К' : n;
 
   const todayStr = new Date().toLocaleDateString('ru-RU');
-  const todayCount = transactions.filter(t => (t.date||'').includes(todayStr.split('.').reverse().join('-').slice(2)) || (t.date||'').startsWith(todayStr)).length;
+  const todayCount = transactions.filter(t => (t.date||'').startsWith(todayStr.split('.').reverse().join('-').slice(2)) || (t.date||'').includes(todayStr)).length;
 
   document.getElementById('statIncome').textContent    = inc.length;
   document.getElementById('statOutcome').textContent   = out.length;
   document.getElementById('statWriteoff').textContent  = wrt.length;
   document.getElementById('statTotal').textContent     = transactions.length;
-  document.getElementById('statIncomeSum').textContent  = `на ${fmt2(sum(inc))} ₽`;
-  document.getElementById('statOutcomeSum').textContent = `на ${fmt2(sum(out))} ₽`;
-  document.getElementById('statWriteoffSum').textContent= `на ${fmt2(sum(wrt))} ₽`;
+  document.getElementById('statIncomeInfo').textContent  = 'операций';
+  document.getElementById('statOutcomeInfo').textContent = 'операций';
+  document.getElementById('statWriteoffInfo').textContent= 'операций';
   document.getElementById('statToday').textContent     = `сегодня: ${todayCount}`;
 }
 
@@ -670,7 +633,6 @@ function renderTable() {
   const labels = { income:'📥 Приход', outcome:'📤 Расход', writeoff:'🗑 Списание' };
 
   tbody.innerHTML = page.map(t => {
-    const amount = t.total || t.totalAmount || 0;
     return `
       <tr>
         <td><span class="tx-badge ${t.type}">${labels[t.type]}</span></td>
@@ -679,17 +641,15 @@ function renderTable() {
           <div class="product-sku">${t.sku || ''}</div>
         </td>
         <td class="qty-cell">${t.qty || t.quantity || 0} ${t.unit || ''}</td>
-        <td class="qty-cell">${(t.price||0).toLocaleString('ru')} ₽</td>
-        <td class="amount-cell ${t.type}">${amount.toLocaleString('ru')} ₽</td>
-        <td>${t.supplier 
-  ? `<a style="font-size:12px;color:var(--blue);cursor:pointer;text-decoration:none" 
-        onmouseover="this.style.textDecoration='underline'" 
-        onmouseout="this.style.textDecoration='none'"
-        onclick="location.href='/suppliers?highlight=${encodeURIComponent(t.supplier)}'">
-        🚚 ${t.supplier}
-     </a>` 
-  : '<span style="font-size:12px;color:var(--muted)">—</span>'
-}</td>
+        <td>${t.supplier
+          ? `<a style="font-size:12px;color:var(--blue);cursor:pointer;text-decoration:none"
+                onmouseover="this.style.textDecoration='underline'"
+                onmouseout="this.style.textDecoration='none'"
+                onclick="location.href='/suppliers?highlight=${encodeURIComponent(t.supplier)}'">
+                👤 ${t.supplier}
+             </a>`
+          : '<span style="font-size:12px;color:var(--muted)">—</span>'
+        }</td>
         <td class="by-cell">${t.by || t.createdBy || '—'}</td>
         <td class="date-cell">${t.date || t.createdAt || '—'}</td>
         <td class="comment-cell" title="${t.comment||''}">${t.comment || '—'}</td>
@@ -722,10 +682,9 @@ function openModal() {
   updateTypeButtons();
   document.getElementById('f_product').value  = '';
   document.getElementById('f_qty').value      = '';
-  document.getElementById('f_price').value    = '';
+  document.getElementById('f_price').value    = '0';
   document.getElementById('f_supplier').value = '';
   document.getElementById('f_comment').value  = '';
-  document.getElementById('totalDisplay').textContent = '0 ₽';
   document.getElementById('supplierField').style.display = 'flex';
   document.getElementById('modalOverlay').classList.add('open');
 }
@@ -738,11 +697,10 @@ function selectType(type) {
   selectedType = type;
   updateTypeButtons();
 
-  // Автоподставляем цену
+  // Автоподставляем цену из продукта
   const opt = document.getElementById('f_product').selectedOptions[0];
   if (opt && opt.dataset.price) {
-    document.getElementById('f_price').value = type === 'income' ? opt.dataset.price : opt.dataset.price;
-    calcTotal();
+    document.getElementById('f_price').value = opt.dataset.price;
   }
 }
 
@@ -760,25 +718,16 @@ document.getElementById('f_product')?.addEventListener('change', function() {
   const opt = this.selectedOptions[0];
   if (opt && opt.dataset.price) {
     document.getElementById('f_price').value = opt.dataset.price;
-    calcTotal();
   }
 });
-
-function calcTotal() {
-  const qty   = parseFloat(document.getElementById('f_qty').value)   || 0;
-  const price = parseFloat(document.getElementById('f_price').value) || 0;
-  const total = qty * price;
-  document.getElementById('totalDisplay').textContent = total.toLocaleString('ru') + ' ₽';
-}
 
 async function saveTransaction() {
   const productSel = document.getElementById('f_product');
   const productId  = productSel.value;
   const qty        = Number(document.getElementById('f_qty').value);
-  const price      = Number(document.getElementById('f_price').value);
 
-  if (!productId || !qty || !price) {
-    showToast('error', '⚠️', 'Заполните обязательные поля');
+  if (!productId || !qty) {
+    showToast('error', '⚠️', 'Выберите товар и укажите количество');
     return;
   }
 
@@ -786,6 +735,7 @@ async function saveTransaction() {
   const productName = productOpt.text.split(' (')[0];
   const productSku  = productOpt.text.match(/\(([^)]+)\)/)?.[1] || '';
   const unit        = productOpt.dataset.unit || 'шт';
+  const price       = Number(document.getElementById('f_price').value) || 0;
 
   const data = {
     type:     selectedType,
@@ -804,7 +754,6 @@ async function saveTransaction() {
     });
     if (res.ok) {
       const created = await res.json();
-      // Нормализуем поля из бэка
       const tx = {
         id: created.id,
         type: created.type,
@@ -813,14 +762,13 @@ async function saveTransaction() {
         qty: created.quantity,
         unit: created.unit || created.product?.unit || unit,
         price: created.price,
-        total: created.total || created.totalAmount || (created.quantity * created.price),
+        total: created.total || created.totalAmount || 0,
         supplier: created.supplier?.name || created.supplier || data.supplier,
         by: created.createdBy?.displayName || created.by || 'Вы',
         date: created.date || created.createdAt || new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),
         comment: created.comment || data.comment,
       };
       transactions.unshift(tx);
-      // Обновляем список товаров для селекта
       await loadProducts();
     } else {
       const err = await res.json().catch(()=>({}));
@@ -828,7 +776,6 @@ async function saveTransaction() {
       return;
     }
   } catch {
-    // Мок
     transactions.unshift({
       id: Date.now(), type: selectedType,
       product: productName, sku: productSku,
@@ -848,12 +795,11 @@ async function saveTransaction() {
 
 // ─── ЭКСПОРТ ───────────────────────────────────────────────
 function exportCSV() {
-  const headers = ['Тип','Товар','Артикул','Кол-во','Ед.','Цена','Сумма','Поставщик','Кто','Дата','Комментарий'];
+  const headers = ['Тип','Товар','Артикул','Кол-во','Ед.','Клиент/Поставщик','Кто','Дата','Комментарий'];
   const typeRu  = { income:'Приход', outcome:'Расход', writeoff:'Списание' };
   const rows = filtered.map(t => [
     typeRu[t.type], t.product||'', t.sku||'',
     t.qty||t.quantity||0, t.unit||'',
-    t.price||0, t.total||t.totalAmount||0,
     t.supplier||'', t.by||t.createdBy||'',
     t.date||t.createdAt||'', t.comment||''
   ]);

@@ -65,23 +65,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflo
 .wh-stat.free .wh-stat-val{color:var(--green)}
 
 /* ПЛАН СКЛАДА — SVG-КАРТА */
-.floor-plan-wrap{
-  background:var(--surface);border:1px solid var(--border);border-radius:20px;
-  padding:32px;margin-bottom:32px;position:relative;overflow:hidden;
-}
+.floor-plan-wrap{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:32px;position:relative;overflow:hidden}
 .floor-plan-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
 .floor-plan-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
 .floor-plan-title{font-family:var(--font-head);font-size:22px;letter-spacing:1px}
 .map-legend{display:flex;gap:16px;flex-wrap:wrap}
 .leg-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
 .leg-box{width:14px;height:14px;border-radius:3px;border:2px solid}
-
-/* SVG план */
 #warehouseSVG{width:100%;cursor:default;display:block}
-
-/* ЛЕГЕНДА ВНИЗУ */
-.floor-plan-footer{display:flex;align-items:center;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:10px}
-.floor-plan-hint{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
 
 /* ЗАПОЛНЕНИЕ */
 .fill-wrap{margin-top:16px}
@@ -99,6 +90,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflo
 .sel-icon{font-size:24px}
 .sel-text{flex:1}.sel-name{font-weight:700;font-size:14px;color:var(--accent)}.sel-meta{font-size:12px;color:var(--muted);margin-top:2px}
 .sel-clear{background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;padding:4px;transition:color .2s}.sel-clear:hover{color:var(--red)}
+
 .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
 .calc-field{display:flex;flex-direction:column;gap:6px}
 .calc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted)}
@@ -112,6 +104,31 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflo
 input[type=range]{width:100%;height:6px;appearance:none;background:var(--border);border-radius:3px;outline:none;cursor:pointer}
 input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid var(--bg);box-shadow:0 0 0 2px var(--accent)}
 .period-ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ─── СТРАХОВАНИЕ ─── */
+.insurance-block{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.insurance-toggle{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;cursor:pointer;user-select:none;transition:background .15s}
+.insurance-toggle:hover{background:rgba(255,255,255,.03)}
+.ins-toggle-left{display:flex;align-items:center;gap:12px}
+.ins-icon{font-size:22px}
+.ins-title{font-weight:700;font-size:14px}
+.ins-subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+/* переключатель */
+.toggle-switch{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;transition:background .2s;flex-shrink:0}
+.toggle-switch::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle-switch.on{background:var(--green)}
+.toggle-switch.on::after{transform:translateX(20px)}
+/* тело страховки */
+.insurance-body{padding:16px 18px;border-top:1px solid var(--border);background:rgba(46,213,115,.04);display:none}
+.insurance-body.open{display:block}
+.ins-note{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.ins-calc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:3px 0}
+.ins-calc-row .iv{color:var(--green);font-weight:700}
+.ins-total{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.ins-total-lbl{font-size:13px;font-weight:700}
+.ins-total-val{font-family:var(--font-head);font-size:24px;color:var(--green)}
+
+/* ИТОГО РЕЗУЛЬТАТ */
 .calc-result{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin-bottom:20px}
 .res-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:3px 0}
 .res-row .rv{color:var(--text);font-weight:600}
@@ -120,6 +137,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
 .res-total-lbl{font-size:14px;font-weight:700}
 .res-total-val{font-family:var(--font-head);font-size:34px;color:var(--accent)}
 .res-perday{font-size:11px;color:var(--muted)}
+
 .btn-submit{width:100%;padding:16px;background:var(--accent);color:#0a0d14;font-family:var(--font-head);font-size:22px;letter-spacing:2px;border:none;border-radius:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
 .btn-submit:hover{background:#ffb929;transform:translateY(-1px);box-shadow:0 8px 30px rgba(240,165,0,.3)}
 .btn-submit:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none;box-shadow:none}
@@ -153,7 +171,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
 /* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:480px;max-width:100%;animation:fadeUp .3s ease;position:relative;overflow:hidden}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:500px;max-width:100%;animation:fadeUp .3s ease;position:relative;overflow:hidden}
 .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
 .modal-head{padding:24px 28px 16px;border-bottom:1px solid var(--border)}
 .modal-title{font-family:var(--font-head);font-size:24px;letter-spacing:1px;margin-bottom:4px}
@@ -170,6 +188,8 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
 .order-summary{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:13px}
 .osum-row{display:flex;justify-content:space-between;padding:2px 0;color:var(--muted)}
 .osum-row .ov{color:var(--text);font-weight:600}
+.osum-row .ov.green{color:var(--green)}
+.osum-divider{height:1px;background:var(--border);margin:6px 0}
 .osum-total{display:flex;justify-content:space-between;padding-top:8px;margin-top:6px;border-top:1px solid var(--border)}
 .osum-total span:first-child{font-weight:700;font-size:13px}
 .osum-total span:last-child{font-family:var(--font-head);font-size:20px;color:var(--accent)}
@@ -195,6 +215,9 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
 .toast{position:fixed;bottom:24px;right:24px;z-index:400;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;transform:translateY(80px);opacity:0;transition:all .3s ease;pointer-events:none;min-width:260px}
 .toast.show{transform:translateY(0);opacity:1}.toast.success{border-left:3px solid var(--green)}.toast.error{border-left:3px solid var(--red)}
 
+.floor-plan-footer{display:flex;align-items:center;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:10px}
+.floor-plan-hint{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
@@ -217,8 +240,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
     <a href="#features">Услуги</a>
     <a href="#warehouse" class="header-btn">Арендовать</a>
   </nav>
-  <!-- ДОБАВИТЬ в topbar-right -->
-<button class="btn btn-ghost btn-sm" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  <button class="btn-outline" style="padding:7px 14px;font-size:12px;border-radius:8px" onclick="toggleTheme()" id="themeBtn">🌙</button>
   <a class="admin-link" href="/">⚙ Управление</a>
 </header>
 
@@ -259,81 +281,43 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
       </div>
     </div>
 
-    <!-- SVG ПЛАН СКЛАДА -->
     <svg id="warehouseSVG" viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <pattern id="roadPattern" patternUnits="userSpaceOnUse" width="40" height="40">
-          <rect width="40" height="40" fill="#0d1018"/>
-          <line x1="20" y1="0" x2="20" y2="40" stroke="#1a2035" stroke-width="1" stroke-dasharray="8,8"/>
-        </pattern>
-        <pattern id="asphalt" patternUnits="userSpaceOnUse" width="20" height="20">
-          <rect width="20" height="20" fill="#0d1018"/>
-        </pattern>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
+        <filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
-
-      <!-- ТЕРРИТОРИЯ / АСФАЛЬТ -->
       <rect x="0" y="0" width="900" height="540" fill="#0d1018"/>
-
-      <!-- ДОРОГА ВОКРУГ СКЛАДА — КОЛЬЦЕВАЯ ПОДЪЕЗДНАЯ -->
-      <!-- Верхняя дорога -->
       <rect x="50" y="30" width="800" height="60" fill="#0f1318" rx="2"/>
       <line x1="50" y1="60" x2="850" y2="60" stroke="#1e2840" stroke-width="1" stroke-dasharray="20,12"/>
       <text x="450" y="55" text-anchor="middle" font-family="Golos Text" font-size="10" fill="#3a4560" letter-spacing="3">ВЪЕЗД НА ТЕРРИТОРИЮ — СЕВЕРНАЯ ДОРОГА</text>
-
-      <!-- Нижняя дорога -->
       <rect x="50" y="450" width="800" height="60" fill="#0f1318" rx="2"/>
       <line x1="50" y1="480" x2="850" y2="480" stroke="#1e2840" stroke-width="1" stroke-dasharray="20,12"/>
       <text x="450" y="495" text-anchor="middle" font-family="Golos Text" font-size="10" fill="#3a4560" letter-spacing="3">ВЫЕЗД С ТЕРРИТОРИИ — ЮЖНАЯ ДОРОГА</text>
-
-      <!-- Левая дорога -->
       <rect x="30" y="30" width="50" height="480" fill="#0f1318"/>
-      <!-- Правая дорога -->
       <rect x="820" y="30" width="50" height="480" fill="#0f1318"/>
-
-      <!-- СТРЕЛКИ ДВИЖЕНИЯ на дорогах -->
       <text x="75" y="270" text-anchor="middle" font-size="16" fill="#1e2840">↓</text>
       <text x="845" y="270" text-anchor="middle" font-size="16" fill="#1e2840">↑</text>
       <text x="280" y="52" text-anchor="middle" font-size="14" fill="#1e2840">→</text>
       <text x="620" y="52" text-anchor="middle" font-size="14" fill="#1e2840">→</text>
       <text x="280" y="492" text-anchor="middle" font-size="14" fill="#1e2840">←</text>
       <text x="620" y="492" text-anchor="middle" font-size="14" fill="#1e2840">←</text>
-
-      <!-- ВНЕШНЯЯ СТЕНА СКЛАДА -->
       <rect x="100" y="95" width="700" height="350" fill="#141824" stroke="#2a3050" stroke-width="2" rx="4"/>
-
-      <!-- ЦЕНТРАЛЬНЫЙ КОРИДОР (внутри склада) -->
       <rect x="100" y="255" width="700" height="40" fill="#0f1318" rx="0"/>
       <text x="450" y="280" text-anchor="middle" font-family="Golos Text" font-size="10" fill="#2a3050" letter-spacing="2">ВНУТРЕННИЙ ПРОЕЗД / КОРИДОР</text>
       <line x1="120" y1="275" x2="870" y2="275" stroke="#1e2840" stroke-width="1" stroke-dasharray="12,8"/>
-
-      <!-- ═══════════════════════════════════════ -->
-      <!-- ВЕРХНИЙ РЯД СЕКЦИЙ (въезд сверху) -->
-      <!-- ═══════════════════════════════════════ -->
-
       <!-- Секция A1 -->
       <g id="sec_A1" class="sec-group" onclick="selectSection('A1')" style="cursor:pointer">
-        <!-- Тело секции -->
         <rect id="body_A1" x="108" y="103" width="130" height="145" fill="rgba(46,213,115,.08)" stroke="rgba(46,213,115,.4)" stroke-width="1.5" rx="3"/>
-        <!-- Ворота (дебаркадер) сверху -->
         <rect x="148" y="95" width="50" height="14" fill="rgba(61,139,255,.25)" stroke="rgba(61,139,255,.6)" stroke-width="1.5" rx="2"/>
         <text x="173" y="105" text-anchor="middle" font-family="Golos Text" font-size="8" fill="#3d8bff" font-weight="700">ВОРОТА</text>
-        <!-- Стрелка въезда -->
         <text x="173" y="90" text-anchor="middle" font-size="12" fill="#3d8bff">↓</text>
-        <!-- Метка секции -->
         <text x="173" y="150" text-anchor="middle" font-family="Bebas Neue" font-size="28" fill="rgba(46,213,115,.5)" id="lbl_A1">A1</text>
         <text x="173" y="170" text-anchor="middle" font-family="Golos Text" font-size="11" fill="#2ed573">100 м²</text>
         <text x="173" y="185" text-anchor="middle" font-family="Golos Text" font-size="10" fill="rgba(46,213,115,.6)">СВОБОДНО</text>
-        <!-- Стрелка стеллажей -->
         <rect x="115" y="205" width="116" height="34" fill="rgba(46,213,115,.04)" stroke="rgba(46,213,115,.15)" stroke-width="1" rx="2"/>
         <text x="173" y="217" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="173" y="229" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 8м</text>
       </g>
-
-      <!-- Секция A2 — ЗАНЯТА -->
+      <!-- Секция A2 ЗАНЯТА -->
       <g id="sec_A2" class="sec-group" style="cursor:not-allowed">
         <rect id="body_A2" x="248" y="103" width="130" height="145" fill="rgba(255,71,87,.1)" stroke="rgba(255,71,87,.4)" stroke-width="1.5" rx="3"/>
         <rect x="288" y="95" width="50" height="14" fill="rgba(255,71,87,.2)" stroke="rgba(255,71,87,.5)" stroke-width="1.5" rx="2"/>
@@ -347,7 +331,6 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="313" y="217" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="313" y="229" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 8м</text>
       </g>
-
       <!-- Секция A3 -->
       <g id="sec_A3" class="sec-group" onclick="selectSection('A3')" style="cursor:pointer">
         <rect id="body_A3" x="388" y="103" width="130" height="145" fill="rgba(46,213,115,.08)" stroke="rgba(46,213,115,.4)" stroke-width="1.5" rx="3"/>
@@ -361,8 +344,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="453" y="217" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="453" y="229" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 8м</text>
       </g>
-
-      <!-- Секция A4 — ЗАНЯТА -->
+      <!-- Секция A4 ЗАНЯТА -->
       <g id="sec_A4" class="sec-group" style="cursor:not-allowed">
         <rect id="body_A4" x="528" y="103" width="130" height="145" fill="rgba(255,71,87,.1)" stroke="rgba(255,71,87,.4)" stroke-width="1.5" rx="3"/>
         <rect x="568" y="95" width="50" height="14" fill="rgba(255,71,87,.2)" stroke="rgba(255,71,87,.5)" stroke-width="1.5" rx="2"/>
@@ -376,7 +358,6 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="593" y="217" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="593" y="229" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 8м</text>
       </g>
-
       <!-- Секция A5 -->
       <g id="sec_A5" class="sec-group" onclick="selectSection('A5')" style="cursor:pointer">
         <rect id="body_A5" x="668" y="103" width="124" height="145" fill="rgba(46,213,115,.08)" stroke="rgba(46,213,115,.4)" stroke-width="1.5" rx="3"/>
@@ -390,12 +371,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="730" y="217" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="730" y="229" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 8м</text>
       </g>
-
-      <!-- ═══════════════════════════════════════ -->
-      <!-- НИЖНИЙ РЯД СЕКЦИЙ (въезд снизу) -->
-      <!-- ═══════════════════════════════════════ -->
-
-      <!-- Секция B1 — ЗАНЯТА -->
+      <!-- Секция B1 ЗАНЯТА -->
       <g id="sec_B1" class="sec-group" style="cursor:not-allowed">
         <rect id="body_B1" x="108" y="302" width="130" height="140" fill="rgba(255,71,87,.1)" stroke="rgba(255,71,87,.4)" stroke-width="1.5" rx="3"/>
         <rect x="148" y="436" width="50" height="14" fill="rgba(255,71,87,.2)" stroke="rgba(255,71,87,.5)" stroke-width="1.5" rx="2"/>
@@ -409,7 +385,6 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="173" y="316" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="173" y="328" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 6м</text>
       </g>
-
       <!-- Секция B2 -->
       <g id="sec_B2" class="sec-group" onclick="selectSection('B2')" style="cursor:pointer">
         <rect id="body_B2" x="248" y="302" width="130" height="140" fill="rgba(46,213,115,.08)" stroke="rgba(46,213,115,.4)" stroke-width="1.5" rx="3"/>
@@ -423,8 +398,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="313" y="316" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="313" y="328" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 6м</text>
       </g>
-
-      <!-- Секция B3 — ЗАНЯТА -->
+      <!-- Секция B3 ЗАНЯТА -->
       <g id="sec_B3" class="sec-group" style="cursor:not-allowed">
         <rect id="body_B3" x="388" y="302" width="130" height="140" fill="rgba(255,71,87,.1)" stroke="rgba(255,71,87,.4)" stroke-width="1.5" rx="3"/>
         <rect x="428" y="436" width="50" height="14" fill="rgba(255,71,87,.2)" stroke="rgba(255,71,87,.5)" stroke-width="1.5" rx="2"/>
@@ -438,7 +412,6 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="453" y="316" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="453" y="328" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 6м</text>
       </g>
-
       <!-- Секция B4 -->
       <g id="sec_B4" class="sec-group" onclick="selectSection('B4')" style="cursor:pointer">
         <rect id="body_B4" x="528" y="302" width="130" height="140" fill="rgba(46,213,115,.08)" stroke="rgba(46,213,115,.4)" stroke-width="1.5" rx="3"/>
@@ -452,7 +425,6 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="593" y="316" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="593" y="328" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 6м</text>
       </g>
-
       <!-- Секция B5 -->
       <g id="sec_B5" class="sec-group" onclick="selectSection('B5')" style="cursor:pointer">
         <rect id="body_B5" x="668" y="302" width="124" height="140" fill="rgba(46,213,115,.08)" stroke="rgba(46,213,115,.4)" stroke-width="1.5" rx="3"/>
@@ -466,20 +438,14 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="730" y="316" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">▤ Стеллажи</text>
         <text x="730" y="328" text-anchor="middle" font-family="Golos Text" font-size="9" fill="#3a4560">высота 6м</text>
       </g>
-
-      <!-- ═══════ ОХРАНА / БУДКА ═══════ -->
+      <!-- ОХРАНА -->
       <rect x="50" y="240" width="50" height="60" fill="#111822" stroke="#2a3050" stroke-width="1.5" rx="3"/>
       <text x="75" y="265" text-anchor="middle" font-family="Golos Text" font-size="8" fill="#5a6380">ОХРАНА</text>
       <text x="75" y="282" text-anchor="middle" font-size="16" fill="#f0a500">🛡</text>
-      <!-- ШЛАГБАУМ -->
       <line x1="100" y1="270" x2="120" y2="230" stroke="#f0a500" stroke-width="3" stroke-linecap="round"/>
       <circle cx="100" cy="270" r="4" fill="#f0a500"/>
-
-      <!-- ПОДПИСИ РЯДОВ -->
       <text x="450" y="87" text-anchor="middle" font-family="Golos Text" font-size="10" fill="#5a6380" letter-spacing="2">↓ РЯД А — ВЪЕЗД С СЕВЕРА ↓</text>
       <text x="450" y="468" text-anchor="middle" font-family="Golos Text" font-size="10" fill="#5a6380" letter-spacing="2">↑ РЯД Б — ВЪЕЗД С ЮГА ↑</text>
-
-      <!-- КОМПАС -->
       <g transform="translate(848, 108)">
         <circle cx="0" cy="0" r="18" fill="#111822" stroke="#2a3050" stroke-width="1.5"/>
         <text x="0" y="-5" text-anchor="middle" font-size="10" fill="#e8ecf4" font-weight="700">С</text>
@@ -488,8 +454,6 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <text x="12" y="5" text-anchor="middle" font-size="9" fill="#5a6380">В</text>
         <line x1="0" y1="-2" x2="0" y2="-13" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/>
       </g>
-
-      <!-- HOVER HIGHLIGHT OVERLAY (рисуется поверх JS-ом) -->
       <rect id="selectedOverlay" x="0" y="0" width="0" height="0" fill="rgba(240,165,0,.15)" stroke="var(--accent)" stroke-width="2.5" rx="3" pointer-events="none"/>
     </svg>
 
@@ -497,10 +461,9 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
       <div class="fill-labels"><span>Заполненность склада</span><span id="fillPct">—</span></div>
       <div class="fill-bar"><div class="fill-fill" id="fillBar" style="width:0%"></div></div>
     </div>
-
     <div class="floor-plan-footer">
       <div class="floor-plan-hint">💡 Нажмите на зелёную секцию, чтобы выбрать её для аренды</div>
-      <div style="font-size:12px;color:var(--muted)">Каждая секция = 100 м²(10x10) · Высота потолков 6–8м · Собственные ворота</div>
+      <div style="font-size:12px;color:var(--muted)">Каждая секция = 100 м² (10×10) · Высота потолков 6–8м · Собственные ворота</div>
     </div>
   </div>
 
@@ -539,14 +502,47 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
       </div>
     </div>
 
+    <!-- ─── БЛОК СТРАХОВАНИЯ ─── -->
+    <div class="insurance-block">
+      <div class="insurance-toggle" onclick="toggleInsurance()">
+        <div class="ins-toggle-left">
+          <span class="ins-icon">🛡️</span>
+          <div>
+            <div class="ins-title">Страхование товара</div>
+            <div class="ins-subtitle">Мы выступаем агентом страховой компании «СтрахПро»</div>
+          </div>
+        </div>
+        <div class="toggle-switch" id="insSwitch"></div>
+      </div>
+      <div class="insurance-body" id="insBody">
+        <div class="ins-note">
+          Вы самостоятельно оцениваете стоимость своего товара. Страховой взнос составляет <strong>10%</strong> от объявленной стоимости и оплачивается единовременно. В случае утраты или повреждения товара по вине хранителя страховая компания возместит ущерб в размере объявленной стоимости.
+        </div>
+        <div class="calc-field" style="margin-bottom:14px">
+          <div class="calc-label">Объявленная стоимость товара, ₽</div>
+          <input class="calc-input" id="declaredValue" type="number" placeholder="Введите оценочную стоимость вашего товара" min="0" oninput="calcPrice()"/>
+        </div>
+        <div class="ins-calc-row"><span>Объявленная стоимость</span><span class="iv" id="insDeclared">—</span></div>
+        <div class="ins-calc-row"><span>Страховой взнос (10%)</span><span class="iv" id="insPremium">—</span></div>
+        <div class="ins-total">
+          <div class="ins-total-lbl">К оплате за страховку</div>
+          <div class="ins-total-val" id="insTotalVal">— ₽</div>
+        </div>
+      </div>
+    </div>
+
     <div class="calc-result" id="calcResult">
       <div class="res-row"><span>Площадь</span><span class="rv" id="rArea">— м²</span></div>
       <div class="res-row"><span>Тариф хранения</span><span class="rv" id="rRate">— ₽/м²/мес</span></div>
       <div class="res-row"><span>Срок</span><span class="rv" id="rPeriod">— мес</span></div>
       <div class="res-row" id="discRow" style="display:none"><span>Скидка за срок</span><span class="rv" style="color:#2ed573" id="rDisc">—</span></div>
+      <div class="res-row" id="insRow" style="display:none"><span>🛡️ Страховой взнос</span><span class="rv" style="color:var(--green)" id="rInsurance">—</span></div>
       <div class="res-divider"></div>
       <div class="res-total">
-        <div><div class="res-total-lbl">Итого к оплате</div><div class="res-perday" id="rPerDay">— ₽/день</div></div>
+        <div>
+          <div class="res-total-lbl">Итого к оплате</div>
+          <div class="res-perday" id="rPerDay">— ₽/день</div>
+        </div>
         <div class="res-total-val" id="rTotal">— ₽</div>
       </div>
     </div>
@@ -571,7 +567,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <div class="tariff-feat"><span class="feat-yes">✓</span> Охрана и видеонаблюдение</div>
         <div class="tariff-feat"><span class="feat-yes">✓</span> Собственные ворота</div>
         <div class="tariff-feat"><span class="feat-no">—</span> Климат-контроль</div>
-        <div class="tariff-feat"><span class="feat-no">—</span> Персональный менеджер</div>
+        <div class="tariff-feat"><span class="feat-no">—</span> Страхование товара</div>
       </div>
       <button class="tariff-btn" onclick="setPeriod(1)">Выбрать</button>
     </div>
@@ -586,7 +582,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <div class="tariff-feat"><span class="feat-yes">✓</span> Охрана и видеонаблюдение</div>
         <div class="tariff-feat"><span class="feat-yes">✓</span> Собственные ворота</div>
         <div class="tariff-feat"><span class="feat-yes">✓</span> Климат-контроль</div>
-        <div class="tariff-feat"><span class="feat-no">—</span> Персональный менеджер</div>
+        <div class="tariff-feat"><span class="feat-yes">✓</span> Страхование товара (опция)</div>
       </div>
       <button class="tariff-btn" onclick="setPeriod(6)">Выбрать</button>
     </div>
@@ -600,7 +596,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
         <div class="tariff-feat"><span class="feat-yes">✓</span> Охрана и видеонаблюдение</div>
         <div class="tariff-feat"><span class="feat-yes">✓</span> Собственные ворота</div>
         <div class="tariff-feat"><span class="feat-yes">✓</span> Климат-контроль</div>
-        <div class="tariff-feat"><span class="feat-yes">✓</span> Персональный менеджер</div>
+        <div class="tariff-feat"><span class="feat-yes">✓</span> Страхование товара (опция)</div>
       </div>
       <button class="tariff-btn" onclick="setPeriod(12)">Выбрать</button>
     </div>
@@ -613,10 +609,10 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;b
   <h2 class="section-title">ПОЧЕМУ МЫ</h2>
   <p class="section-sub">Каждый арендатор получает полноценное складское пространство с прямым доступом</p>
   <div class="features-grid">
-    <div class="feat-card"><div class="feat-icon">🚛</div><div class="feat-name">Прямой въезд к секции</div><div class="feat-desc">У каждого помещения собственные ворота 4×4м и рампа для прямой разгрузки грузовика — никакого перемещения через центральный коридор</div></div>
+    <div class="feat-card"><div class="feat-icon">🚛</div><div class="feat-name">Прямой въезд к секции</div><div class="feat-desc">У каждого помещения собственные ворота 4×4м и рампа для прямой разгрузки грузовика</div></div>
     <div class="feat-card"><div class="feat-icon">🔒</div><div class="feat-name">Охрана 24/7</div><div class="feat-desc">Круглосуточная охрана, видеонаблюдение на всей территории, контроль въезда по пропускам</div></div>
     <div class="feat-card"><div class="feat-icon">🌡️</div><div class="feat-name">Климат-контроль</div><div class="feat-desc">Поддержание температуры 15–22°C и влажности 40–60% в каждой секции независимо</div></div>
-    <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-name">Онлайн-учёт</div><div class="feat-desc">Отслеживайте остатки, историю операций и документы через личный кабинет</div></div>
+    <div class="feat-card"><div class="feat-icon">🛡️</div><div class="feat-name">Страхование товара</div><div class="feat-desc">Мы — агент страховой компании «СтрахПро». Клиент сам оценивает товар и платит 10% от стоимости в виде страхового взноса. При утрате — полное возмещение.</div></div>
     <div class="feat-card"><div class="feat-icon">⚡</div><div class="feat-name">Оформление за 1 день</div><div class="feat-desc">Договор, ключи и пропуска в течение одного рабочего дня после подачи заявки</div></div>
     <div class="feat-card"><div class="feat-icon">📐</div><div class="feat-name">Гибкая площадь</div><div class="feat-desc">Аренда от 100 м² с возможностью расширения на соседние секции при необходимости</div></div>
   </div>
@@ -680,7 +676,6 @@ var SECTIONS = {
   B5:{label:'B5',area:100,occupied:false,row:'south',height:'6м',desc:'Напольное хранение · Ворота 4×4м · Рампа · Высота 6м'},
 };
 
-// Координаты секций для подсветки
 var SEC_COORDS = {
   A1:{x:108,y:103,w:130,h:145},A2:{x:248,y:103,w:130,h:145},A3:{x:388,y:103,w:130,h:145},
   A4:{x:528,y:103,w:130,h:145},A5:{x:668,y:103,w:124,h:145},
@@ -688,62 +683,68 @@ var SEC_COORDS = {
   B4:{x:528,y:302,w:130,h:140},B5:{x:668,y:302,w:124,h:140},
 };
 
-var selectedSec  = null;
-var currentPeriod= 1;
+var selectedSec   = null;
+var currentPeriod = 1;
+var insEnabled    = false;
 
 // ─── ИНИЦИАЛИЗАЦИЯ ───────────────────────────────────────────
 function init() {
-  // Статистика
   var total    = Object.keys(SECTIONS).length;
   var occupied = Object.values(SECTIONS).filter(function(s){ return s.occupied; }).length;
   var free     = total - occupied;
-  var pct      = Math.round(occupied/total*100);
-  var totalM2  = total * 100;
-
-  document.getElementById('statTotal').textContent    = totalM2.toLocaleString('ru') + ' м²';
-  document.getElementById('statOccupied').textContent = (occupied*100) + ' м²';
-  document.getElementById('statFree').textContent     = (free*100) + ' м²';
+  var pct      = Math.round(occupied / total * 100);
+  document.getElementById('statTotal').textContent    = (total * 100).toLocaleString('ru') + ' м²';
+  document.getElementById('statOccupied').textContent = (occupied * 100) + ' м²';
+  document.getElementById('statFree').textContent     = (free * 100) + ' м²';
   document.getElementById('fillPct').textContent      = pct + '%';
   setTimeout(function(){ document.getElementById('fillBar').style.width = pct + '%'; }, 300);
-
-  // Дата
   document.getElementById('startDate').value = new Date().toISOString().split('T')[0];
   onPeriod(1);
+}
+
+// ─── СТРАХОВАНИЕ ─────────────────────────────────────────────
+function toggleInsurance() {
+  insEnabled = !insEnabled;
+  var sw   = document.getElementById('insSwitch');
+  var body = document.getElementById('insBody');
+  sw.className   = 'toggle-switch' + (insEnabled ? ' on' : '');
+  body.className = 'insurance-body' + (insEnabled ? ' open' : '');
+  calcPrice();
+}
+
+function getInsurancePremium() {
+  if (!insEnabled) return 0;
+  var val = parseFloat(document.getElementById('declaredValue').value) || 0;
+  return Math.round(val * 0.1);
 }
 
 // ─── ВЫБОР СЕКЦИИ ────────────────────────────────────────────
 function selectSection(id) {
   var sec = SECTIONS[id];
   if (!sec || sec.occupied) return;
-
   selectedSec = id;
-
-  // Подсветка
-  var coords = SEC_COORDS[id];
+  var coords  = SEC_COORDS[id];
   var overlay = document.getElementById('selectedOverlay');
   overlay.setAttribute('x', coords.x);
   overlay.setAttribute('y', coords.y);
-  overlay.setAttribute('width', coords.w);
+  overlay.setAttribute('width',  coords.w);
   overlay.setAttribute('height', coords.h);
-
-  // Инфо в калькуляторе
-  document.getElementById('selInfo').style.display  = 'flex';
-  document.getElementById('noSelHint').style.display= 'none';
-  document.getElementById('selName').textContent    = 'Секция ' + id + ' — ' + sec.area + ' м²';
-  document.getElementById('selMeta').textContent    = sec.desc;
-
+  document.getElementById('selInfo').style.display   = 'flex';
+  document.getElementById('noSelHint').style.display = 'none';
+  document.getElementById('selName').textContent = 'Секция ' + id + ' — ' + sec.area + ' м²';
+  document.getElementById('selMeta').textContent = sec.desc;
   calcPrice();
   setTimeout(function(){
-    document.getElementById('calculator').scrollIntoView({behavior:'smooth',block:'nearest'});
-  },300);
+    document.getElementById('calculator').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }, 300);
 }
 
 function clearSel() {
   selectedSec = null;
   var overlay = document.getElementById('selectedOverlay');
-  overlay.setAttribute('width','0');overlay.setAttribute('height','0');
-  document.getElementById('selInfo').style.display  = 'none';
-  document.getElementById('noSelHint').style.display= 'block';
+  overlay.setAttribute('width', '0'); overlay.setAttribute('height', '0');
+  document.getElementById('selInfo').style.display   = 'none';
+  document.getElementById('noSelHint').style.display = 'block';
   document.getElementById('submitBtn').disabled = true;
   resetCalc();
 }
@@ -757,7 +758,8 @@ function onPeriod(val) {
   document.getElementById('periodUnit').textContent = u;
   var sd = document.getElementById('startDate').value;
   if (sd) {
-    var end = new Date(sd); end.setMonth(end.getMonth()+currentPeriod);
+    var end = new Date(sd);
+    end.setMonth(end.getMonth() + currentPeriod);
     document.getElementById('periodEnd').textContent = 'по ' + end.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
   }
   if (selectedSec) calcPrice();
@@ -768,21 +770,31 @@ function setPeriod(months) {
   document.getElementById('warehouse').scrollIntoView({behavior:'smooth'});
 }
 
-document.getElementById('startDate').addEventListener('change',function(){ onPeriod(currentPeriod); });
+document.getElementById('startDate').addEventListener('change', function(){ onPeriod(currentPeriod); });
 
 // ─── РАСЧЁТ ──────────────────────────────────────────────────
 function getRate(m) { return m>=12?950:m>=3?1200:1500; }
 function getDisc(m) { return m>=12?37:m>=6?20:m>=3?10:0; }
 
 function calcPrice() {
-  if (!selectedSec) return;
-  var area   = SECTIONS[selectedSec].area;
-  var rate   = getRate(currentPeriod);
-  var disc   = getDisc(currentPeriod);
-  var base   = area * rate * currentPeriod;
-  var saving = Math.round(base*disc/100);
-  var total  = base - saving;
-  var perDay = Math.round(total/(currentPeriod*30));
+  if (!selectedSec) {
+    // обновляем только страховую часть
+    var prem = getInsurancePremium();
+    var decl = insEnabled ? (parseFloat(document.getElementById('declaredValue').value)||0) : 0;
+    document.getElementById('insDeclared').textContent = decl ? decl.toLocaleString('ru') + ' ₽' : '—';
+    document.getElementById('insPremium').textContent  = prem ? prem.toLocaleString('ru') + ' ₽' : '—';
+    document.getElementById('insTotalVal').textContent = prem ? prem.toLocaleString('ru') + ' ₽' : '— ₽';
+    return;
+  }
+  var area    = SECTIONS[selectedSec].area;
+  var rate    = getRate(currentPeriod);
+  var disc    = getDisc(currentPeriod);
+  var base    = area * rate * currentPeriod;
+  var saving  = Math.round(base * disc / 100);
+  var storage = base - saving;
+  var premium = getInsurancePremium();
+  var total   = storage + premium;
+  var perDay  = Math.round(total / (currentPeriod * 30));
 
   document.getElementById('rArea').textContent   = area + ' м²';
   document.getElementById('rRate').textContent   = rate.toLocaleString('ru') + ' ₽/м²/мес';
@@ -790,42 +802,72 @@ function calcPrice() {
   document.getElementById('rTotal').textContent  = total.toLocaleString('ru') + ' ₽';
   document.getElementById('rPerDay').textContent = perDay.toLocaleString('ru') + ' ₽/день';
 
-  if (disc>0) {
-    document.getElementById('discRow').style.display='flex';
-    document.getElementById('rDisc').textContent = '-'+disc+'% (-'+saving.toLocaleString('ru')+' ₽)';
+  if (disc > 0) {
+    document.getElementById('discRow').style.display = 'flex';
+    document.getElementById('rDisc').textContent = '-' + disc + '% (-' + saving.toLocaleString('ru') + ' ₽)';
   } else {
-    document.getElementById('discRow').style.display='none';
+    document.getElementById('discRow').style.display = 'none';
   }
+
+  if (premium > 0) {
+    document.getElementById('insRow').style.display = 'flex';
+    document.getElementById('rInsurance').textContent = '+' + premium.toLocaleString('ru') + ' ₽';
+  } else {
+    document.getElementById('insRow').style.display = 'none';
+  }
+
+  // Страховой блок
+  var decl = insEnabled ? (parseFloat(document.getElementById('declaredValue').value)||0) : 0;
+  document.getElementById('insDeclared').textContent = decl ? decl.toLocaleString('ru') + ' ₽' : '—';
+  document.getElementById('insPremium').textContent  = premium ? premium.toLocaleString('ru') + ' ₽' : '—';
+  document.getElementById('insTotalVal').textContent = premium ? premium.toLocaleString('ru') + ' ₽' : '— ₽';
+
   document.getElementById('submitBtn').disabled = false;
 }
 
 function resetCalc() {
-  ['rArea','rRate','rPeriod','rTotal'].forEach(function(id){ document.getElementById(id).textContent='— '+id.replace('r',''); });
-  document.getElementById('rTotal').textContent='— ₽';
-  document.getElementById('rPerDay').textContent='— ₽/день';
-  document.getElementById('discRow').style.display='none';
+  document.getElementById('rArea').textContent   = '— м²';
+  document.getElementById('rRate').textContent   = '— ₽/м²/мес';
+  document.getElementById('rPeriod').textContent = '— мес';
+  document.getElementById('rTotal').textContent  = '— ₽';
+  document.getElementById('rPerDay').textContent = '— ₽/день';
+  document.getElementById('discRow').style.display = 'none';
+  document.getElementById('insRow').style.display  = 'none';
 }
 
 // ─── МОДАЛКА ─────────────────────────────────────────────────
 function openModal() {
   if (!selectedSec) { showToast('error','⚠️','Выберите секцию на плане'); return; }
-  var area  = SECTIONS[selectedSec].area;
-  var rate  = getRate(currentPeriod);
-  var disc  = getDisc(currentPeriod);
-  var base  = area * rate * currentPeriod;
-  var total = base - Math.round(base*disc/100);
-  var u     = currentPeriod===1?'месяц':currentPeriod<5?'месяца':'месяцев';
+  var area    = SECTIONS[selectedSec].area;
+  var rate    = getRate(currentPeriod);
+  var disc    = getDisc(currentPeriod);
+  var base    = area * rate * currentPeriod;
+  var saving  = Math.round(base * disc / 100);
+  var storage = base - saving;
+  var premium = getInsurancePremium();
+  var total   = storage + premium;
+  var decl    = insEnabled ? (parseFloat(document.getElementById('declaredValue').value)||0) : 0;
+  var u       = currentPeriod===1?'месяц':currentPeriod<5?'месяца':'месяцев';
 
   document.getElementById('m_name').value = document.getElementById('clientName').value;
-  document.getElementById('orderSum').innerHTML =
-    '<div class="osum-row"><span>Секция</span><span class="ov">'+selectedSec+' — '+area+' м²</span></div>'+
-    '<div class="osum-row"><span>Тариф</span><span class="ov">'+rate.toLocaleString('ru')+' ₽/м²/мес</span></div>'+
-    '<div class="osum-row"><span>Срок</span><span class="ov">'+currentPeriod+' '+u+'</span></div>'+
-    (disc>0?'<div class="osum-row"><span>Скидка</span><span class="ov" style="color:#2ed573">-'+disc+'%</span></div>':'')+
-    '<div class="osum-total"><span>К оплате</span><span>'+total.toLocaleString('ru')+' ₽</span></div>';
 
-  document.getElementById('modalForm').style.display='block';
-  document.getElementById('successScreen').style.display='none';
+  var insHtml = insEnabled && premium > 0
+    ? '<div class="osum-divider"></div>' +
+      '<div class="osum-row"><span>🛡️ Объявл. стоимость товара</span><span class="ov">' + decl.toLocaleString('ru') + ' ₽</span></div>' +
+      '<div class="osum-row"><span>🛡️ Страховой взнос (10%)</span><span class="ov green">' + premium.toLocaleString('ru') + ' ₽</span></div>'
+    : '<div class="osum-row" style="color:var(--muted);font-size:12px"><span>🛡️ Страхование</span><span class="ov">не выбрано</span></div>';
+
+  document.getElementById('orderSum').innerHTML =
+    '<div class="osum-row"><span>Секция</span><span class="ov">' + selectedSec + ' — ' + area + ' м²</span></div>' +
+    '<div class="osum-row"><span>Тариф</span><span class="ov">' + rate.toLocaleString('ru') + ' ₽/м²/мес</span></div>' +
+    '<div class="osum-row"><span>Срок</span><span class="ov">' + currentPeriod + ' ' + u + '</span></div>' +
+    (disc > 0 ? '<div class="osum-row"><span>Скидка</span><span class="ov" style="color:#2ed573">-' + disc + '%</span></div>' : '') +
+    '<div class="osum-row"><span>Хранение</span><span class="ov">' + storage.toLocaleString('ru') + ' ₽</span></div>' +
+    insHtml +
+    '<div class="osum-total"><span>Итого к оплате</span><span>' + total.toLocaleString('ru') + ' ₽</span></div>';
+
+  document.getElementById('modalForm').style.display    = 'block';
+  document.getElementById('successScreen').style.display = 'none';
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -836,59 +878,67 @@ async function submitOrder() {
   var phone   = document.getElementById('m_phone').value.trim();
   var email   = document.getElementById('m_email').value.trim();
   var comment = document.getElementById('m_comment').value.trim();
-  if (!name||!phone) { showToast('error','⚠️','Заполните имя и телефон'); return; }
+  if (!name || !phone) { showToast('error','⚠️','Заполните имя и телефон'); return; }
 
-  var area  = selectedSec ? SECTIONS[selectedSec].area : 0;
-  var rate  = getRate(currentPeriod);
-  var disc  = getDisc(currentPeriod);
-  var base  = area * rate * currentPeriod;
-  var total = base - Math.round(base*disc/100);
-  var sd    = document.getElementById('startDate').value;
+  var area    = selectedSec ? SECTIONS[selectedSec].area : 0;
+  var rate    = getRate(currentPeriod);
+  var disc    = getDisc(currentPeriod);
+  var base    = area * rate * currentPeriod;
+  var storage = base - Math.round(base * disc / 100);
+  var premium = getInsurancePremium();
+  var total   = storage + premium;
+  var decl    = insEnabled ? (parseFloat(document.getElementById('declaredValue').value)||0) : 0;
+  var sd      = document.getElementById('startDate').value;
 
   try {
     await fetch('/api/public-requests', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        clientName:    name,
-        clientPhone:   phone,
-        clientEmail:   email,
-        sectionId:     selectedSec||'',
-        area:          area,
-        storageRate:   rate,
-        periodMonths:  currentPeriod,
-        totalCost:     total,
-        startDate:     sd,
-        comment:       comment,
+        clientName:       name,
+        clientPhone:      phone,
+        clientEmail:      email,
+        sectionId:        selectedSec || '',
+        area:             area,
+        storageRate:      rate,
+        periodMonths:     currentPeriod,
+        totalCost:        total,
+        startDate:        sd,
+        comment:          comment,
+        insuranceEnabled: insEnabled,
+        declaredValue:    decl,
       })
     });
   } catch(e) { /* офлайн — всё равно показываем успех */ }
 
-  document.getElementById('modalForm').style.display='none';
-  document.getElementById('successScreen').style.display='flex';
+  document.getElementById('modalForm').style.display     = 'none';
+  document.getElementById('successScreen').style.display = 'flex';
 }
-// ТЕМА
+
+// ─── ТЕМА ────────────────────────────────────────────────────
 function toggleTheme(){
-  var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
-  document.documentElement.setAttribute('data-theme',t);
-  localStorage.setItem('theme',t);
-  document.getElementById('themeBtn').textContent=t==='light'?'🌙':'☀️';
+  var t = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+  document.getElementById('themeBtn').textContent = t === 'light' ? '🌙' : '☀️';
 }
 (function(){
-  var t=localStorage.getItem('theme')||'dark';
-  document.documentElement.setAttribute('data-theme',t);
-  var btn=document.getElementById('themeBtn');
-  if(btn)btn.textContent=t==='light'?'🌙':'☀️';
+  var t = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  var btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = t === 'light' ? '🌙' : '☀️';
 })();
 
 // ─── УТИЛИТЫ ─────────────────────────────────────────────────
-function showToast(type,icon,text){
-  var t=document.getElementById('toast');
-  document.getElementById('toastIcon').textContent=icon;document.getElementById('toastText').textContent=text;
-  t.className='toast '+type+' show';setTimeout(function(){t.classList.remove('show');},3000);
+function showToast(type, icon, text){
+  var t = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastText').textContent = text;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
 }
-document.getElementById('modalOverlay').addEventListener('click',function(e){ if(e.target.id==='modalOverlay')closeModal(); });
-document.addEventListener('keydown',function(e){ if(e.key==='Escape')closeModal(); });
+document.getElementById('modalOverlay').addEventListener('click', function(e){ if(e.target.id==='modalOverlay') closeModal(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
 
 init();
 </script>
